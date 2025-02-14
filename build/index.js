@@ -321,29 +321,43 @@ const RegionSelect = () => {
     setLoading(false);
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "min-h-screen flex items-center justify-center bg-gray-50"
+    className: "flex items-center justify-center bg-gray-50 "
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "w-full max-w-2xl"
+    className: "w-full max-w-2xl p-4 shadow-lg rounded-lg"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bg-white p-8 rounded-lg shadow-lg"
+    className: "p-8 border-b-2 border-slate-300"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex items-center justify-center gap-2 mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    className: "h-6 w-6 text-gray-700"
+    className: "h-6 w-6 text-gray-500"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
-    className: "text-xl font-semibold text-gray-700"
+    className: "text-xxl font-semibold text-gray-500 m-0"
   }, "Select Your Region"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
   }, regions.map(region => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: region.id,
     variant: "outline",
-    className: "h-auto p-4 flex flex-col items-start gap-2",
+    className: "h-auto p-4 flex flex-col items-start gap-2 lang-select",
     onClick: () => handleRegionSelect(region.id)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
   }, region.name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-gray-500"
-  }, region.languages.join(", ")))))));
+  }, region.languages.join(", "))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "h-auto p-4 flex flex-col items-start gap-2t items-start"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-semibold"
+  }, "Global Headquarters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm text-gray-500"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "6 Warren Street", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Glens Falls, NY 12801 USA", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "800-741-7756", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "518-798-5462"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "h-auto p-4 flex flex-col items-start gap-2t items-start"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-semibold"
+  }, "European Headquarters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm text-gray-500"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Lindenstrasse 39", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "61250 Usingen", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Wernborn, Germany", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "+49 6081 4468343"))))));
 };
 
 // Initialize the React app
