@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+// Variables
+$primary-color: #0073aa;
+$border-color: #ddd;
+$text-color: #333;
+$text-secondary: #666;
+$white: #fff;
+$transition-speed: 0.2s;
+
+// Mixins
+@mixin card-shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-template-region-select-template {
+    #wrapper {
+        #main {
+            // Main container
+            .region-select {
+                min-height: 100vh;
+                background-color: #f5f5f5;
+                padding: 2rem 1rem;
+            
+                &__container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    background-color: $white;
+                    border-radius: 12px;
+                    padding: 2rem;
+                    @include card-shadow;
+                }
+                
+                &__header {
+                    @include flex-center;
+                    flex-direction: column;
+                    margin-bottom: 3rem;
+                    text-align: center;
+                }
+                
+                &__icon {
+                    width: 48px;
+                    height: 48px;
+                    color: $primary-color;
+                    margin-bottom: 1rem;
+                }
+                
+                &__title {
+                    font-size: 2rem;
+                    color: $text-color;
+                    margin: 0;
+                    font-weight: 600;
+                }
+                
+                &__grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 1.5rem;
+                    padding: 1rem;
+                }
+            }
+
+            // Region card
+            .region-card {
+                background: $white;
+                border: 2px solid $border-color;
+                border-radius: 8px;
+                padding: 1.5rem;
+                text-align: left;
+                transition: all $transition-speed ease;
+                cursor: pointer;
+                width: 100%;
+                
+                &:hover:not(:disabled) {
+                    border-color: $primary-color;
+                    @include card-shadow;
+                    transform: translateY(-2px);
+                }
+                
+                &:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                }
+                
+                &__title {
+                    margin: 0 0 0.5rem 0;
+                    font-size: 1.25rem;
+                    color: $text-color;
+                    font-weight: 600;
+                }
+                
+                &__languages {
+                    margin: 0;
+                    color: $text-secondary;
+                    font-size: 0.9rem;
+                    line-height: 1.4;
+                }
+            }
+
+            // Responsive adjustments
+            @media (max-width: 768px) {
+                .region-select {
+                    padding: 1rem;
+                    
+                    &__container {
+                    padding: 1.5rem;
+                    }
+                    
+                    &__title {
+                    font-size: 1.75rem;
+                    }
+                    
+                    &__grid {
+                    gap: 1rem;
+                    padding: 0.5rem;
+                    }
+                }
+            }
+        }
+    }
+}
