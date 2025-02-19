@@ -110,22 +110,28 @@ class RegionSelect {
 
 		switch ( $selected_region ) {
 			case 'us':
-				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=us' );
+				header( 'Location: ' . home_url( '?region=us' ) );
+				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=us' );
 				break;
 			case 'it':
-				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=it' );
+				header( 'Location: ' . home_url( '?region=it' ) );
+				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=it' );
 				break;
 			case 'fr':
-				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=fr' );
+				header( 'Location: ' . home_url( '?region=fr' ) );
+				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=fr' );
 				break;
 			case 'es':
-				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=es' );
+				header( 'Location: ' . home_url( '?region=es' ) );
+				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=es' );
 				break;
 			case 'de':
-				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=de' );
+				header( 'Location: ' . home_url( '?region=de' ) );
+				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=de' );
 				break;
 			case 'uk':
-				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=uk' );
+				header( 'Location: ' . home_url( '?region=uk' ) );
+				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=uk' );
 				break;
 			default:
 				header( 'Location: ' . home_url() );
