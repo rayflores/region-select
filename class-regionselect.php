@@ -36,6 +36,9 @@ class RegionSelect {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_filter( 'page_template', array( $this, 'region_select_template' ) );
 		add_filter( 'theme_page_templates', array( $this, 'add_region_select_template' ) );
+
+		// Add a shortcode to display the div element where the React app will be rendered.
+		add_shortcode( 'region_select', array( $this, 'region_select_shortcode' ) );
 	}
 
 	/**
@@ -76,13 +79,57 @@ class RegionSelect {
 		if ( is_admin() ) {
 			return;
 		}
-		if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_page( 'region-select' ) ) {
-			// Only redirect if not already on the select page.
-				header( 'Location: ' . home_url() . '/region-select' );
-		} elseif ( ! isset( $_COOKIE['selectedRegion'] ) && is_page( 'region-select' ) ) {
-			return;
-		} else {
-			return;
+		if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_home() ) {
+
+			// add 'region-select' query arg.
+			$url = str_replace( '=true', '', add_query_arg( 'region-select', 'true', home_url() ) );
+
+			if ( ! isset( $_COOKIE['selectedRegion'] ) && is_home() ) {
+
+				if ( isset( $_GET['region-select'] ) ) {
+					return;
+				} else {
+					header( 'Location: ' . home_url( '?region-select' ) );
+				}
+			}
+		} elseif ( isset( $_COOKIE['selectedRegion'] ) && is_home() ) {
+			// Redirect to the selected region website with switch case.
+			$this->redirect_to_selected_region();
+
+			header( 'Location: ' . home_url( $_COOKIE['selectedRegion'] ) );
+		}
+	}
+
+	/**
+	 * Redirect to the selected region website
+	 *
+	 * @since 1.0
+	 */
+	public function redirect_to_selected_region() {
+		$selected_region = isset( $_COOKIE['selectedRegion'] ) ? wp_unslash( sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) ) : '';
+
+		switch ( $selected_region ) {
+			case 'us':
+				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=us' );
+				break;
+			case 'it':
+				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=it' );
+				break;
+			case 'fr':
+				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=fr' );
+				break;
+			case 'es':
+				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=es' );
+				break;
+			case 'de':
+				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=de' );
+				break;
+			case 'uk':
+				wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=uk' );
+				break;
+			default:
+				header( 'Location: ' . home_url() );
+				break;
 		}
 	}
 
@@ -174,7 +221,14 @@ class RegionSelect {
 			);
 		}
 	}
+
+	// Add a shortcode to display the div element where the React app will be rendered.
+	public function region_select_shortcode() {
+		return '<div id="region-select-root"></div>';
+	}
 }
+
+
 
 // Initialize the plugin.
 $region_select = new RegionSelect();
