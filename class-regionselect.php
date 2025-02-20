@@ -149,12 +149,14 @@ class RegionSelect {
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react-dom' );
 
+			$inc = require 'dist/index.asset.php';
+
 			// Enqueue our plugin's React app.
 			wp_enqueue_script(
 				'region-select-app',
 				plugins_url( 'build/index.js', __FILE__ ),
-				array( 'react', 'react-dom' ),
-				'1.0',
+				$inc['dependencies'],
+				$inc['version'],
 				true
 			);
 
@@ -163,7 +165,7 @@ class RegionSelect {
 				'region-select-css',
 				plugins_url( 'build/index.css', __FILE__ ),
 				array(),
-				'1.0'
+				filemtime( plugin_dir_path( __FILE__ ) . 'build/index.css' )
 			);
 
 			// Pass WordPress data to React.
