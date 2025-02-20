@@ -126,7 +126,7 @@ const RegionSelect = () => {
             </div>
           </div>
           <p className="text-sm text-gray-500 p-4">
-            All other regions please contact our Global Headquarters.
+            All other regions see Global Headquarters.
           </p>
         </div>
       </div>
