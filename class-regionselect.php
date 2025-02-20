@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 1.0
+ * Version: 1.2
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
@@ -149,7 +149,7 @@ class RegionSelect {
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react-dom' );
 
-			$inc = require 'dist/index.asset.php';
+			$inc = require 'build/index.asset.php';
 
 			// Enqueue our plugin's React app.
 			wp_enqueue_script(
