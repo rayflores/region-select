@@ -6,18 +6,21 @@ import "./styles/region-select.scss";
 const RegionSelect = () => {
   //   console.log("RegionSelect");
   const [loading, setLoading] = useState(false);
+  const [showDiv, setShowDiv] = useState(false);
+
+  useEffect(() => {
+    // check url for region query param
+    const urlParams = new URLSearchParams(window.location.search);
+    const region = urlParams.get("region-select");
+    if (region) {
+      console.log("region", region);
+      setShowDiv(true);
+    } else {
+      setShowDiv(false);
+    }
+  });
 
   const regions = [
-    {
-      id: "na",
-      name: "Americas",
-      languages: ["English"],
-    },
-    {
-      id: "it",
-      name: "Italy",
-      languages: ["Italian"],
-    },
     {
       id: "fr",
       name: "France",
@@ -29,14 +32,14 @@ const RegionSelect = () => {
       languages: ["German"],
     },
     {
+      id: "it",
+      name: "Italy",
+      languages: ["Italian"],
+    },
+    {
       id: "es",
       name: "Spain",
       languages: ["Spanish"],
-    },
-    {
-      id: "uk",
-      name: "United Kingdom",
-      languages: ["English"],
     },
   ];
 
@@ -57,7 +60,7 @@ const RegionSelect = () => {
 
       if (response.ok) {
         // Redirect to home page after setting cookie
-        window.location.href = wpData.homeUrl + "/?region=" + regionId;
+        window.location.href = wpData.homeUrl + "/" + regionId;
       }
     } catch (error) {
       console.error("Error setting region:", error);
@@ -65,69 +68,92 @@ const RegionSelect = () => {
     setLoading(false);
   };
 
+  if (!showDiv) {
+    return <div className="hidden"></div>;
+  }
+
   return (
-    <div className="flex items-center justify-center">
-      <div className="w-full max-w-1xl p-4 shadow-lg rounded-lg">
+    <div className="flex items-center justify-center ">
+      <div className="p-4 shadow-lg rounded-lg">
         <div className="p-8">
           <div className="flex items-center justify-center gap-2 mb-6">
             <Globe className="h-6 w-6 text-gray-500" />
             <h2 className="text-xxl font-semibold text-gray-500 m-0">
-              Select Your Region
+              Select Region/Language
             </h2>
           </div>
         </div>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:border-r-2 md:border-gray-600">
-            {regions.map((region) => (
+          <div className="grid grid-cols-1 gap-4 md:border-r-2 md:border-gray-600">
+            <div
+              key="na"
+              variant="outline"
+              className="h-auto p-4 flex flex-col items-start gap-2 lang-select"
+            >
+              <div className="font-semibold">Americas</div>
               <div
-                key={region.id}
-                variant="outline"
-                className="h-auto p-4 flex flex-col items-start gap-2 lang-select"
-                onClick={() => handleRegionSelect(region.id)}
+                className="text-sm text-gray-500"
+                onClick={() => handleRegionSelect("na")}
               >
-                <div className="font-semibold">{region.name}</div>
-                <div className="text-sm text-gray-500">
-                  {region.languages.join(", ")}
+                English
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 border-t-2 border-gray-600 md:border-none">
+            <div className="h-auto p-4 flex flex-col items-start gap-2t items-start">
+              <div className="font-semibold">Europe</div>
+              {regions.map((region) => (
+                <div
+                  key={region.id}
+                  variant="outline"
+                  className="h-auto p-4 flex flex-col items-start gap-2 lang-select"
+                >
+                  <div
+                    className="text-sm text-gray-500"
+                    onClick={() => handleRegionSelect(region.id)}
+                  >
+                    {region.languages.join(", ")}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-2 gap-4 border-t-2 border-gray-600 md:border-none">
-            <div className="h-auto p-4 flex flex-col items-start gap-2t items-start">
-              <div className="font-semibold">Global Headquarters</div>
-              <div className="text-sm text-gray-500">
-                <p>
-                  BARTON International
-                  <br />6 Warren Street
-                  <br />
-                  Glens Falls, NY 12801 USA
-                  <br />
-                  800-741-7756
-                  <br />
-                  518-798-5462
-                </p>
-              </div>
-            </div>
-            <div className="h-auto p-4 flex flex-col items-start gap-2t items-start">
-              <div className="font-semibold">European Headquarters</div>
-              <div className="text-sm text-gray-500">
-                <p>
-                  BARTON International
-                  <br />
-                  Lindenstrasse 39
-                  <br />
-                  61250 Usingen
-                  <br />
-                  Wernborn, Germany
-                  <br />
-                  +49 6081 4468343
-                </p>
-              </div>
+              ))}
             </div>
           </div>
-          <p className="text-sm text-gray-500 p-4">
+          <p className="text-sm text-gray-500 p-4 m-4 text-center">
             All other regions, select Americas.
           </p>
+        </div>
+        <div className="grid grid-cols-2 gap-4 border-t-2 border-gray-600">
+          <div className="grid grid-cols-1 gap-4">
+            <div className="font-semibold">Global Headquarters</div>
+            <div className="text-sm text-gray-500">
+              <p>
+                BARTON International
+                <br />6 Warren Street
+                <br />
+                Glens Falls, NY 12801 USA
+                <br />
+                800-741-7756
+                <br />
+                518-798-5462
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            <div className="font-semibold">European Headquarters</div>
+            <div className="text-sm text-gray-500">
+              <p>
+                BARTON International
+                <br />
+                Lindenstrasse 39
+                <br />
+                61250 Usingen
+                <br />
+                Wernborn, Germany
+                <br />
+                +49 6081 4468343
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

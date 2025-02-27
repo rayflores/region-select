@@ -538,6 +538,9 @@ video {
 .m-0 {
   margin: 0px;
 }
+.m-4 {
+  margin: 1rem;
+}
 .mb-6 {
   margin-bottom: 1.5rem;
 }
@@ -546,6 +549,9 @@ video {
 }
 .grid {
   display: grid;
+}
+.hidden {
+  display: none;
 }
 .h-6 {
   height: 1.5rem;
@@ -558,6 +564,9 @@ video {
 }
 .w-full {
   width: 100%;
+}
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -595,6 +604,9 @@ video {
 }
 .p-8 {
   padding: 2rem;
+}
+.text-center {
+  text-align: center;
 }
 .text-sm {
   font-size: 0.875rem;
@@ -645,10 +657,6 @@ nav.fusion-main-menu {
 
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .md\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .md\:border-r-2 {

@@ -273,15 +273,19 @@ __webpack_require__.r(__webpack_exports__);
 const RegionSelect = () => {
   //   console.log("RegionSelect");
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [showDiv, setShowDiv] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    // check url for region query param
+    const urlParams = new URLSearchParams(window.location.search);
+    const region = urlParams.get("region-select");
+    if (region) {
+      console.log("region", region);
+      setShowDiv(true);
+    } else {
+      setShowDiv(false);
+    }
+  });
   const regions = [{
-    id: "na",
-    name: "Americas",
-    languages: ["English"]
-  }, {
-    id: "it",
-    name: "Italy",
-    languages: ["Italian"]
-  }, {
     id: "fr",
     name: "France",
     languages: ["French"]
@@ -290,13 +294,13 @@ const RegionSelect = () => {
     name: "Germany",
     languages: ["German"]
   }, {
+    id: "it",
+    name: "Italy",
+    languages: ["Italian"]
+  }, {
     id: "es",
     name: "Spain",
     languages: ["Spanish"]
-  }, {
-    id: "uk",
-    name: "United Kingdom",
-    languages: ["English"]
   }];
   const handleRegionSelect = async regionId => {
     setLoading(true);
@@ -313,17 +317,22 @@ const RegionSelect = () => {
       });
       if (response.ok) {
         // Redirect to home page after setting cookie
-        window.location.href = wpData.homeUrl + "/?region=" + regionId;
+        window.location.href = wpData.homeUrl + "/" + regionId;
       }
     } catch (error) {
       console.error("Error setting region:", error);
     }
     setLoading(false);
   };
+  if (!showDiv) {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "hidden"
+    });
+  }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center justify-center"
+    className: "flex items-center justify-center "
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "w-full max-w-1xl p-4 shadow-lg rounded-lg"
+    className: "p-4 shadow-lg rounded-lg"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "p-8"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -332,36 +341,49 @@ const RegionSelect = () => {
     className: "h-6 w-6 text-gray-500"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "text-xxl font-semibold text-gray-500 m-0"
-  }, "Select Your Region"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "Select Region/Language"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid sm:grid-cols-1 md:grid-cols-2 gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 md:grid-cols-3 gap-4 md:border-r-2 md:border-gray-600"
-  }, regions.map(region => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    key: region.id,
+    className: "grid grid-cols-1 gap-4 md:border-r-2 md:border-gray-600"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: "na",
     variant: "outline",
-    className: "h-auto p-4 flex flex-col items-start gap-2 lang-select",
-    onClick: () => handleRegionSelect(region.id)
+    className: "h-auto p-4 flex flex-col items-start gap-2 lang-select"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
-  }, region.name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-sm text-gray-500"
-  }, region.languages.join(", "))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 border-t-2 border-gray-600 md:border-none"
+  }, "Americas"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm text-gray-500",
+    onClick: () => handleRegionSelect("na")
+  }, "English"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 border-t-2 border-gray-600 md:border-none"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "h-auto p-4 flex flex-col items-start gap-2t items-start"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-semibold"
+  }, "Europe"), regions.map(region => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: region.id,
+    variant: "outline",
+    className: "h-auto p-4 flex flex-col items-start gap-2 lang-select"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm text-gray-500",
+    onClick: () => handleRegionSelect(region.id)
+  }, region.languages.join(", ")))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-sm text-gray-500 p-4 m-4 text-center"
+  }, "All other regions, select Americas.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 border-t-2 border-gray-600"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
   }, "Global Headquarters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-gray-500"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "6 Warren Street", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Glens Falls, NY 12801 USA", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "800-741-7756", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "518-798-5462"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "h-auto p-4 flex flex-col items-start gap-2t items-start"
+    className: "grid grid-cols-1 gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
   }, "European Headquarters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-gray-500"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Lindenstrasse 39", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "61250 Usingen", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Wernborn, Germany", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "+49 6081 4468343")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "text-sm text-gray-500 p-4"
-  }, "All other regions, select Americas."))));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Lindenstrasse 39", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "61250 Usingen", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Wernborn, Germany", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "+49 6081 4468343"))))));
 };
 
 // Initialize the React app

@@ -79,63 +79,28 @@ class RegionSelect {
 		if ( is_admin() ) {
 			return;
 		}
-		if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_home() ) {
+
+		// add 'region-select' query arg.
+		$url = add_query_arg( 'region-select', 'true', home_url() );
+
+		if ( isset( $_GET['region-select'] ) ) {
+			return;
+		}
+
+		if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_front_page() ) {
+			// No cookie set and not on the home page.
+
+			header( 'Location: ' . $url );
+		} elseif ( ! isset( $_COOKIE['selectedRegion'] ) && is_front_page() ) {
+			// No cookie set and on the home page.
 
 			// add 'region-select' query arg.
-			$url = str_replace( '=true', '', add_query_arg( 'region-select', 'true', home_url() ) );
+			header( 'Location: ' . $url );
 
-			if ( ! isset( $_COOKIE['selectedRegion'] ) && is_home() ) {
-
-				if ( isset( $_GET['region-select'] ) ) {
-					return;
-				} else {
-					header( 'Location: ' . home_url( '?region-select' ) );
-				}
-			}
-		} elseif ( isset( $_COOKIE['selectedRegion'] ) && is_home() ) {
-			// Redirect to the selected region website with switch case.
-			$this->redirect_to_selected_region();
-
-			header( 'Location: ' . home_url( $_COOKIE['selectedRegion'] ) );
-		}
-	}
-
-	/**
-	 * Redirect to the selected region website
-	 *
-	 * @since 1.0
-	 */
-	public function redirect_to_selected_region() {
-		$selected_region = isset( $_COOKIE['selectedRegion'] ) ? wp_unslash( sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) ) : '';
-
-		switch ( $selected_region ) {
-			case 'us':
-				header( 'Location: ' . home_url( '?region=us' ) );
-				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=us' );
-				break;
-			case 'it':
-				header( 'Location: ' . home_url( '?region=it' ) );
-				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=it' );
-				break;
-			case 'fr':
-				header( 'Location: ' . home_url( '?region=fr' ) );
-				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=fr' );
-				break;
-			case 'es':
-				header( 'Location: ' . home_url( '?region=es' ) );
-				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=es' );
-				break;
-			case 'de':
-				header( 'Location: ' . home_url( '?region=de' ) );
-				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=de' );
-				break;
-			case 'uk':
-				header( 'Location: ' . home_url( '?region=uk' ) );
-				// wp_safe_redirect( 'Location: https://bartongarnet.com/?translate=uk' );
-				break;
-			default:
-				header( 'Location: ' . home_url() );
-				break;
+		} elseif ( isset( $_COOKIE['selectedRegion'] ) && is_front_page() ) {
+			header( 'Location: ' . home_url() . '/' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
+		} else {
+			return;
 		}
 	}
 
@@ -145,7 +110,7 @@ class RegionSelect {
 	 * @since 1.0
 	 */
 	public function enqueue_scripts() {
-		if ( is_page( 'region-select' ) ) {
+		if ( is_front_page() ) {
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react-dom' );
 
@@ -216,23 +181,30 @@ class RegionSelect {
 	 * @since 1.0
 	 */
 	public function activate() {
-		// Create the region select page if it doesn't exist.
-		if ( null === get_page_by_path( 'region-select' ) ) {
-			wp_insert_post(
+		// Check home page for region-select shortcode.
+		$home_page = get_page( get_option( 'page_on_front' ) );
+		if ( has_shortcode( $home_page->post_content, 'region_select' ) ) {
+			return;
+		} else {
+			$home_page_content = $home_page->post_content;
+			$home_page_content = '<!-- wp:shortcode -->[region_select]<!-- /wp:shortcode -->' . $home_page_content;
+			wp_update_post(
 				array(
-					'post_title'    => 'Select Your Region',
-					'post_name'     => 'region-select',
-					'post_status'   => 'publish',
-					'post_type'     => 'page',
-					'page_template' => 'region-select-template.php',
+					'ID'           => $home_page->ID,
+					'post_content' => $home_page_content,
 				)
 			);
 		}
 	}
 
-	// Add a shortcode to display the div element where the React app will be rendered.
+	/**
+	 * Display the region select shortcode
+	 *
+	 * @return string
+	 * @since 1.0
+	 */
 	public function region_select_shortcode() {
-		return '<div id="region-select-root"></div>';
+		return '<div id="region-select-root" class="block"></div>';
 	}
 }
 
