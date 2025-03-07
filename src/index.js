@@ -59,8 +59,14 @@ const RegionSelect = () => {
       );
 
       if (response.ok) {
-        // Redirect to home page after setting cookie
-        window.location.href = wpData.homeUrl + "/" + regionId;
+        if (regionId === "na") {
+          // Redirect to home page after setting cookie
+          window.location.href = wpData.homeUrl;
+        } else {
+          // Redirect to home page after setting cookie
+          window.location.href =
+            "https://staging2.bartongarnet.com/?lang=" + regionId;
+        }
       }
     } catch (error) {
       console.error("Error setting region:", error);
@@ -73,90 +79,105 @@ const RegionSelect = () => {
   }
 
   return (
-    <div className="flex items-center justify-center ">
-      <div className="p-4 shadow-lg rounded-lg">
-        <div className="p-8">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Globe className="h-6 w-6 text-gray-500" />
-            <h2 className="text-xxl font-semibold text-gray-500 m-0">
-              Select Region/Language
-            </h2>
-          </div>
-        </div>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="grid grid-cols-1 gap-4 md:border-r-2 md:border-gray-600">
-            <div
-              key="na"
-              variant="outline"
-              className="h-auto p-4 flex flex-col items-start gap-2 lang-select"
-            >
-              <div className="font-semibold">Americas</div>
-              <div
-                className="text-sm text-gray-500"
-                onClick={() => handleRegionSelect("na")}
-              >
-                English
+    <>
+      <div className="top">
+        <div className="flex items-center justify-center ">
+          <div className="p-4">
+            <div className="p-8">
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <Globe className="h-6 w-6 text-gray-500" />
+                <h2 className="text-xxl font-semibold text-gray-500 m-0">
+                  Select Region/Language
+                </h2>
               </div>
             </div>
-          </div>
-          <div className="grid grid-cols-1 gap-4 border-t-2 border-gray-600 md:border-none">
-            <div className="h-auto p-4 flex flex-col items-start gap-2t items-start">
-              <div className="font-semibold">Europe</div>
-              {regions.map((region) => (
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:border-r-2 md:border-gray-600">
                 <div
-                  key={region.id}
+                  key="na"
                   variant="outline"
-                  className="h-auto p-4 flex flex-col items-start gap-2 lang-select"
+                  className="h-auto pe-5 flex flex-col gap-2 text-end"
                 >
+                  <div className="font-semibold">Americas</div>
                   <div
-                    className="text-sm text-gray-500"
-                    onClick={() => handleRegionSelect(region.id)}
+                    className="h-auto pe-0 p-2 flex flex-col gap-2 lang-select text-end"
+                    onClick={() => handleRegionSelect("na")}
                   >
-                    {region.languages.join(", ")}
+                    English
                   </div>
                 </div>
-              ))}
+              </div>
+              <div className="grid grid-cols-1 gap-4 border-t-2 border-gray-600 md:border-none">
+                <div className="h-auto ps-5 flex flex-col gap-2 text-start">
+                  <div className="font-semibold">Europe</div>
+                  {regions.map((region) => (
+                    <div
+                      key={region.id}
+                      variant="outline"
+                      className="h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start"
+                    >
+                      <div
+                        className="text-sm text-gray-500"
+                        onClick={() => handleRegionSelect(region.id)}
+                      >
+                        {region.languages.join(", ")}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-          <p className="text-sm text-gray-500 p-4 m-4 text-center">
-            All other regions, select Americas.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 gap-4 border-t-2 border-gray-600">
-          <div className="grid grid-cols-1 gap-4">
-            <div className="font-semibold">Global Headquarters</div>
-            <div className="text-sm text-gray-500">
-              <p>
-                BARTON International
-                <br />6 Warren Street
-                <br />
-                Glens Falls, NY 12801 USA
-                <br />
-                800-741-7756
-                <br />
-                518-798-5462
-              </p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 gap-4">
-            <div className="font-semibold">European Headquarters</div>
-            <div className="text-sm text-gray-500">
-              <p>
-                BARTON International
-                <br />
-                Lindenstrasse 39
-                <br />
-                61250 Usingen
-                <br />
-                Wernborn, Germany
-                <br />
-                +49 6081 4468343
+            <div className="grid grid-cols-1 gap-4">
+              <p className="text-sm text-gray-500 p-4 m-4 text-center">
+                All other regions, select Americas.
               </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <div className="bottom bg-secondary bg-opacity-75">
+        <div className="flex items-center justify-center ">
+          <div className="p-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 text-end text-white">
+                <div className="font-semibold">Global Headquarters</div>
+                <div className="text-sm text-white">
+                  <p>
+                    BARTON International
+                    <br />6 Warren Street
+                    <br />
+                    Glens Falls, NY 12801 USA
+                    <br />
+                    800-741-7756
+                    <br />
+                    518-798-5462
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4 m-auto h-100">
+                <div class="vr"></div>
+              </div>
+              <div className="grid grid-cols-1 gap-4 text-start text-white">
+                <div className="font-semibold">European Headquarters</div>
+                <div className="text-sm text-white">
+                  <p>
+                    BARTON International
+                    <br />
+                    Lindenstrasse 39
+                    <br />
+                    61250 Usingen
+                    <br />
+                    Wernborn, Germany
+                    <br />
+                    +49 6081 4468343
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

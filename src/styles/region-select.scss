@@ -20,20 +20,19 @@ $transition-speed: 0.2s;
   justify-content: center;
 }
 
-.page-template-region-select-template {
-    #wrapper {
-        #main {
-            // Main container
-            .lang-select {
-                cursor: pointer;
-                &:hover {
-                    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
-                    border-radius: 0.5rem;
-                }
-            }
+// Main container
+#region-select-root {
+    background-color: #ddd;
+    .lang-select {
+        cursor: pointer;
+        &:hover {
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+            border-radius: 0.5rem;
         }
     }
 }
+
+
 /**
 Remove Menu From Main Navigation
 **/

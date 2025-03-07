@@ -39,6 +39,7 @@ class RegionSelect {
 
 		// Add a shortcode to display the div element where the React app will be rendered.
 		add_shortcode( 'region_select', array( $this, 'region_select_shortcode' ) );
+		add_filter( 'avada_before_body_content', array( $this, 'region_select_place_shortcode_before_content' ) );
 	}
 
 	/**
@@ -186,17 +187,17 @@ class RegionSelect {
 		if ( has_shortcode( $home_page->post_content, 'region_select' ) ) {
 			return;
 		} else {
-			$home_page_content = $home_page->post_content;
-			$home_page_content = '<!-- wp:shortcode -->[region_select]<!-- /wp:shortcode -->' . $home_page_content;
-			wp_update_post(
-				array(
-					'ID'           => $home_page->ID,
-					'post_content' => $home_page_content,
-				)
-			);
+			// add shortcode via avada hooks
+
 		}
 	}
 
+	/**
+	 * Filter for avada theme before body content
+	 */
+	public function region_select_place_shortcode_before_content() {
+		echo do_shortcode( '[region_select]' );
+	}
 	/**
 	 * Display the region select shortcode
 	 *

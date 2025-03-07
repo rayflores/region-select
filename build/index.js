@@ -316,8 +316,13 @@ const RegionSelect = () => {
         })
       });
       if (response.ok) {
-        // Redirect to home page after setting cookie
-        window.location.href = wpData.homeUrl + "/" + regionId;
+        if (regionId === "na") {
+          // Redirect to home page after setting cookie
+          window.location.href = wpData.homeUrl;
+        } else {
+          // Redirect to home page after setting cookie
+          window.location.href = "https://staging2.bartongarnet.com/?lang=" + regionId;
+        }
       }
     } catch (error) {
       console.error("Error setting region:", error);
@@ -329,10 +334,12 @@ const RegionSelect = () => {
       className: "hidden"
     });
   }
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "top"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex items-center justify-center "
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "p-4 shadow-lg rounded-lg"
+    className: "p-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "p-8"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -348,42 +355,54 @@ const RegionSelect = () => {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: "na",
     variant: "outline",
-    className: "h-auto p-4 flex flex-col items-start gap-2 lang-select"
+    className: "h-auto pe-5 flex flex-col gap-2 text-end"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
   }, "Americas"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-sm text-gray-500",
+    className: "h-auto pe-0 p-2 flex flex-col gap-2 lang-select text-end",
     onClick: () => handleRegionSelect("na")
   }, "English"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 gap-4 border-t-2 border-gray-600 md:border-none"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "h-auto p-4 flex flex-col items-start gap-2t items-start"
+    className: "h-auto ps-5 flex flex-col gap-2 text-start"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
   }, "Europe"), regions.map(region => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: region.id,
     variant: "outline",
-    className: "h-auto p-4 flex flex-col items-start gap-2 lang-select"
+    className: "h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-gray-500",
     onClick: () => handleRegionSelect(region.id)
-  }, region.languages.join(", ")))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "text-sm text-gray-500 p-4 m-4 text-center"
-  }, "All other regions, select Americas.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 border-t-2 border-gray-600"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, region.languages.join(", "))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-sm text-gray-500 p-4 m-4 text-center"
+  }, "All other regions, select Americas."))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bottom bg-secondary bg-opacity-75"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex items-center justify-center "
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "p-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-3 gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 text-end text-white"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
   }, "Global Headquarters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-sm text-gray-500"
+    className: "text-sm text-white"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "6 Warren Street", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Glens Falls, NY 12801 USA", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "800-741-7756", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "518-798-5462"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-1 gap-4"
+    className: "grid grid-cols-1 gap-4 m-auto h-100"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "vr"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 text-start text-white"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
   }, "European Headquarters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-sm text-gray-500"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Lindenstrasse 39", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "61250 Usingen", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Wernborn, Germany", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "+49 6081 4468343"))))));
+    className: "text-sm text-white"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Lindenstrasse 39", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "61250 Usingen", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Wernborn, Germany", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "+49 6081 4468343"))))))));
 };
 
 // Initialize the React app
