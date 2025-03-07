@@ -99,7 +99,7 @@ class RegionSelect {
 			header( 'Location: ' . $url );
 
 		} elseif ( isset( $_COOKIE['selectedRegion'] ) && is_front_page() ) {
-			header( 'Location: ' . home_url() . '/' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
+			header( 'Location: ' . home_url() . '/?lang=' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
 		} else {
 			return;
 		}
