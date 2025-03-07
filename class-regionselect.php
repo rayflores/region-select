@@ -84,7 +84,7 @@ class RegionSelect {
 		// add 'region-select' query arg.
 		$url = add_query_arg( 'region-select', 'true', home_url() );
 
-		if ( isset( $_GET['lang'] ) ) {
+		if ( isset( $_GET['lang'] ) || isset( $_GET['region-select'] ) ) {
 			return;
 		}
 
@@ -111,7 +111,7 @@ class RegionSelect {
 	 * @since 1.0
 	 */
 	public function enqueue_scripts() {
-		if ( is_front_page() && ! isset( $_GET['lang'] ) ) {
+		if ( is_front_page() && ! isset( $_GET['lang'] ) && isset( $_GET['region-select'] ) ) {
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react-dom' );
 
