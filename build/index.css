@@ -668,13 +668,13 @@ video {
   outline-style: solid;
 }
 #region-select-root {
-  background-color: #ddd;
+  background-color: #fff;
 }
 #region-select-root .lang-select {
   cursor: pointer;
 }
 #region-select-root .lang-select:hover {
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.175);
   border-radius: 0.5rem;
 }
 
@@ -689,7 +689,7 @@ nav.fusion-main-menu {
   display: none;
 }
 
-#silders-container {
+#sliders-container {
   display: none;
 }
 

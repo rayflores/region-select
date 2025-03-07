@@ -22,11 +22,11 @@ $transition-speed: 0.2s;
 
 // Main container
 #region-select-root {
-    background-color: #ddd;
+    background-color: #fff;
     .lang-select {
         cursor: pointer;
         &:hover {
-            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+            box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.175);
             border-radius: 0.5rem;
         }
     }
@@ -45,7 +45,7 @@ nav {
     }
 }
 // Remove Main Content
-#silders-container {
+#sliders-container {
     display: none;
 }
 main#main { 
