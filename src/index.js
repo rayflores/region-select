@@ -22,6 +22,11 @@ const RegionSelect = () => {
 
   const regions = [
     {
+      id: "uk",
+      name: "United Kingdom",
+      languages: ["English"],
+    },
+    {
       id: "fr",
       name: "France",
       languages: ["French"],
@@ -62,6 +67,8 @@ const RegionSelect = () => {
         if (regionId === "na") {
           // Redirect to home page after setting cookie
           window.location.href = wpData.homeUrl;
+        } else if (regionId === "uk") {
+          window.location.href = "https://www.bartongarnet.com/?lang=en";
         } else {
           // Redirect to home page after setting cookie
           window.location.href =
@@ -114,10 +121,10 @@ const RegionSelect = () => {
                     <div
                       key={region.id}
                       variant="outline"
-                      className="h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start"
+                      className="h-auto flex flex-col gap-2 text-start"
                     >
                       <div
-                        className="text-sm text-gray-500"
+                        className="text-sm"
                         onClick={() => handleRegionSelect(region.id)}
                       >
                         {region.languages.join(", ")}
@@ -148,9 +155,9 @@ const RegionSelect = () => {
                     <br />
                     Glens Falls, NY 12801 USA
                     <br />
-                    800-741-7756
+                    +1-800-741-7756
                     <br />
-                    518-798-5462
+                    +1-518-798-5462
                   </p>
                 </div>
               </div>
