@@ -84,7 +84,7 @@ class RegionSelect {
 		// add 'region-select' query arg.
 		$url = add_query_arg( 'region-select', 'true', home_url() );
 
-		if ( isset( $_GET['region-select'] ) ) {
+		if ( isset( $_GET['lang'] ) ) {
 			return;
 		}
 
