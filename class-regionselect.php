@@ -213,4 +213,4 @@ class RegionSelect {
 
 // Initialize the plugin.
 $region_select = new RegionSelect();
-register_activation_hook( __FILE__, array( $region_select, 'activate' ) );
+// register_activation_hook( __FILE__, array( $region_select, 'activate' ) );
