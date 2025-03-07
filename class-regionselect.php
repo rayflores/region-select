@@ -111,7 +111,7 @@ class RegionSelect {
 	 * @since 1.0
 	 */
 	public function enqueue_scripts() {
-		if ( is_front_page() ) {
+		if ( is_front_page() && ! isset( $_GET['lang'] ) ) {
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react-dom' );
 
