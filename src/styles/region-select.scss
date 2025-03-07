@@ -44,3 +44,14 @@ nav {
         display: none;
     }
 }
+// Remove Main Content
+#silders-container {
+    display: none;
+}
+main#main { 
+    display: none;
+}
+// Remove Footer
+.fusion-footer {
+    display: none;
+}

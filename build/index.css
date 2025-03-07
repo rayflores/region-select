@@ -689,6 +689,18 @@ nav.fusion-main-menu {
   display: none;
 }
 
+#silders-container {
+  display: none;
+}
+
+main#main {
+  display: none;
+}
+
+.fusion-footer {
+  display: none;
+}
+
 @media (min-width: 640px) {
 
   .sm\:grid-cols-1 {
