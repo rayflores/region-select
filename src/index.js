@@ -135,7 +135,7 @@ const RegionSelect = () => {
           </div>
         </div>
       </div>
-      <div className="bottom bg-secondary bg-opacity-75">
+      <div className="bottom bg-gray-900 bg-opacity-75">
         <div className="flex items-center justify-center ">
           <div className="p-4">
             <div className="grid grid-cols-3 gap-4">
@@ -155,7 +155,7 @@ const RegionSelect = () => {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4 m-auto h-100">
-                <div class="vr"></div>
+                <div class="inline-block h-[auto] min-h-[1em] w-0.5 self-stretch bg-neutral-100 dark:bg-white/10"></div>
               </div>
               <div className="grid grid-cols-1 gap-4 text-start text-white">
                 <div className="font-semibold">European Headquarters</div>
