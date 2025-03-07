@@ -154,8 +154,8 @@ const RegionSelect = () => {
                   </p>
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-4 m-auto h-100">
-                <div class="inline-block h-[auto] min-h-[1em] w-0.5 self-stretch bg-neutral-100 dark:bg-white/10"></div>
+              <div className="grid grid-cols-1 gap-4 m-auto h-full">
+                <div class="inline-block h-full min-h-[1em] w-0.5 self-stretch bg-neutral-100 dark:bg-white/10"></div>
               </div>
               <div className="grid grid-cols-1 gap-4 text-start text-white">
                 <div className="font-semibold">European Headquarters</div>

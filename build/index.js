@@ -393,9 +393,9 @@ const RegionSelect = () => {
   }, "Global Headquarters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-white"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "BARTON International", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "6 Warren Street", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "Glens Falls, NY 12801 USA", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "800-741-7756", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), "518-798-5462"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-1 gap-4 m-auto h-100"
+    className: "grid grid-cols-1 gap-4 m-auto h-full"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    class: "inline-block h-[auto] min-h-[1em] w-0.5 self-stretch bg-neutral-100 dark:bg-white/10"
+    class: "inline-block h-full min-h-[1em] w-0.5 self-stretch bg-neutral-100 dark:bg-white/10"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 gap-4 text-start text-white"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
