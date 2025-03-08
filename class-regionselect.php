@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 1.4
+ * Version: 1.4.test
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
@@ -37,10 +37,7 @@ class RegionSelect {
 
 		// Add a shortcode to display the div element where the React app will be rendered.
 		add_shortcode( 'region_select', array( $this, 'region_select_shortcode' ) );
-		if ( is_page( 10990 ) ) {
-			add_filter( 'avada_after_header_wrapper', array( $this, 'region_select_place_shortcode_before_content' ) );
-		}
-		// add_filter( 'avada_after_header_wrapper', array( $this, 'region_select_place_shortcode_before_content' ) );
+		add_filter( 'avada_after_header_wrapper', array( $this, 'region_select_place_shortcode_before_content' ) );
 	}
 
 	/**
@@ -163,11 +160,12 @@ class RegionSelect {
 	public function activate() {
 		// Check home page for region-select shortcode.
 		// $home_page = get_page( get_option( 'page_on_front' ) );
+		// $home_page = get_page( 10990 );
 		// if ( has_shortcode( $home_page->post_content, 'region_select' ) ) {
 		// return;
 		// } else {
 		// add shortcode via avada hooks
-
+		// $home_page->post_content = '<!-- wp:shortcode -->[region_select]<!-- /wp:shortcode -->' . $home_page->post_content;
 		// }
 	}
 
@@ -175,7 +173,9 @@ class RegionSelect {
 	 * Filter for avada theme before body content
 	 */
 	public function region_select_place_shortcode_before_content() {
-		echo do_shortcode( '[region_select]' );
+		if ( is_page( 10990 ) ) {
+			echo do_shortcode( '[region_select]' );
+		}
 	}
 	/**
 	 * Display the region select shortcode
