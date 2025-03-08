@@ -54,7 +54,8 @@ class RegionSelect {
 		}
 
 		// add 'region-select' query arg.
-		$url = add_query_arg( 'region-select', 'true', home_url() );
+		// $url = add_query_arg( 'region-select', 'true', home_url() );
+		$url = add_query_arg( 'region-select', 'true', get_permalink( 10990 ) );
 
 		if ( isset( $_GET['lang'] ) || isset( $_GET['region-select'] ) ) {
 			return;
@@ -74,7 +75,8 @@ class RegionSelect {
 
 			// } elseif ( isset( $_COOKIE['selectedRegion'] ) && is_front_page() ) {
 		} elseif ( isset( $_COOKIE['selectedRegion'] ) && is_page( 10990 ) ) {
-			header( 'Location: ' . home_url() . '/?lang=' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
+			// header( 'Location: ' . home_url() . '/?lang=' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
+			header( 'Location: ' . get_permalink( 10990 ) . '/?lang=' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
 		} else {
 			return;
 		}
