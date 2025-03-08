@@ -634,6 +634,9 @@ video {
 .pe-5 {
   padding-inline-end: 1.25rem;
 }
+.ps-0 {
+  padding-inline-start: 0px;
+}
 .ps-5 {
   padding-inline-start: 1.25rem;
 }

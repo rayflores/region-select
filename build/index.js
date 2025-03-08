@@ -376,7 +376,7 @@ const RegionSelect = () => {
   }, "Europe"), regions.map(region => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: region.id,
     variant: "outline",
-    className: "h-auto flex flex-col gap-2 text-start"
+    className: "h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm",
     onClick: () => handleRegionSelect(region.id)

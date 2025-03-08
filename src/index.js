@@ -121,7 +121,7 @@ const RegionSelect = () => {
                     <div
                       key={region.id}
                       variant="outline"
-                      className="h-auto flex flex-col gap-2 text-start"
+                      className="h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start"
                     >
                       <div
                         className="text-sm"
