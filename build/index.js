@@ -324,7 +324,7 @@ const RegionSelect = () => {
           // Redirect to home page after setting cookie
           window.location.href = wpData.homeUrl;
         } else if (regionId === "uk") {
-          window.location.href = "https://www.bartongarnet.com/?lang=en";
+          window.location.href = "https://staging2.bartongarnet.com/?lang=en";
         } else {
           // Redirect to home page after setting cookie
           window.location.href = "https://staging2.bartongarnet.com/?lang=" + regionId;
