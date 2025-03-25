@@ -292,19 +292,19 @@ const RegionSelect = () => {
   }, {
     id: "fr",
     name: "France",
-    languages: ["French"]
+    languages: ["French / Français"]
   }, {
     id: "de",
     name: "Germany",
-    languages: ["German"]
+    languages: ["German / Deutsch"]
   }, {
     id: "it",
     name: "Italy",
-    languages: ["Italian"]
+    languages: ["Italian / Italiano"]
   }, {
     id: "es",
     name: "Spain",
-    languages: ["Spanish"]
+    languages: ["Spanish / Español"]
   }];
   const handleRegionSelect = async regionId => {
     setLoading(true);
@@ -359,8 +359,6 @@ const RegionSelect = () => {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 gap-4 md:border-r-2 md:border-gray-600"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    key: "na",
-    variant: "outline",
     className: "h-auto pe-5 flex flex-col gap-2 text-end"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-semibold"
@@ -375,15 +373,14 @@ const RegionSelect = () => {
     className: "font-semibold"
   }, "Europe"), regions.map(region => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: region.id,
-    variant: "outline",
-    className: "h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start"
+    className: ""
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-sm",
+    className: "h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start",
     onClick: () => handleRegionSelect(region.id)
   }, region.languages.join(", "))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "text-sm text-gray-500 p-4 m-4 text-center"
+    className: "text-gray-500 p-4 m-4 text-center"
   }, "All other regions, select Americas."))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bottom bg-gray-900 bg-opacity-75"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

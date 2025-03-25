@@ -664,9 +664,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
-.outline {
-  outline-style: solid;
-}
 #region-select-root {
   background-color: #fff;
 }

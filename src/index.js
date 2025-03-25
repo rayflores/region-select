@@ -29,22 +29,22 @@ const RegionSelect = () => {
     {
       id: "fr",
       name: "France",
-      languages: ["French"],
+      languages: ["French / Français"],
     },
     {
       id: "de",
       name: "Germany",
-      languages: ["German"],
+      languages: ["German / Deutsch"],
     },
     {
       id: "it",
       name: "Italy",
-      languages: ["Italian"],
+      languages: ["Italian / Italiano"],
     },
     {
       id: "es",
       name: "Spain",
-      languages: ["Spanish"],
+      languages: ["Spanish / Español"],
     },
   ];
 
@@ -100,11 +100,7 @@ const RegionSelect = () => {
             </div>
             <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid grid-cols-1 gap-4 md:border-r-2 md:border-gray-600">
-                <div
-                  key="na"
-                  variant="outline"
-                  className="h-auto pe-5 flex flex-col gap-2 text-end"
-                >
+                <div className="h-auto pe-5 flex flex-col gap-2 text-end">
                   <div className="font-semibold">Americas</div>
                   <div
                     className="h-auto pe-0 p-2 flex flex-col gap-2 lang-select text-end"
@@ -118,13 +114,9 @@ const RegionSelect = () => {
                 <div className="h-auto ps-5 flex flex-col gap-2 text-start">
                   <div className="font-semibold">Europe</div>
                   {regions.map((region) => (
-                    <div
-                      key={region.id}
-                      variant="outline"
-                      className="h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start"
-                    >
+                    <div key={region.id} className="">
                       <div
-                        className="text-sm"
+                        className="h-auto ps-0 p-2 flex flex-col gap-2 lang-select text-start"
                         onClick={() => handleRegionSelect(region.id)}
                       >
                         {region.languages.join(", ")}
@@ -135,7 +127,7 @@ const RegionSelect = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 gap-4">
-              <p className="text-sm text-gray-500 p-4 m-4 text-center">
+              <p className="text-gray-500 p-4 m-4 text-center">
                 All other regions, select Americas.
               </p>
             </div>
@@ -194,4 +186,3 @@ if (container) {
   const root = createRoot(container);
   root.render(<RegionSelect />);
 }
-
