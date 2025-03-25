@@ -598,6 +598,9 @@ video {
 .gap-4 {
   gap: 1rem;
 }
+.gap-0 {
+  gap: 0px;
+}
 .self-stretch {
   align-self: stretch;
 }
@@ -663,6 +666,10 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity, 1));
 }
 #region-select-root {
   background-color: #fff;

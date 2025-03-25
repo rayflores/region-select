@@ -355,7 +355,7 @@ const RegionSelect = () => {
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "text-xxl font-semibold text-gray-500 m-0"
   }, "Select Region/Language"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid sm:grid-cols-1 md:grid-cols-2 gap-4"
+    className: "grid sm:grid-cols-1 md:grid-cols-2 gap-0"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 gap-4 md:border-r-2 md:border-gray-600"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -380,7 +380,7 @@ const RegionSelect = () => {
   }, region.languages.join(", "))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "text-gray-500 p-4 m-4 text-center"
+    className: "text-black p-4 m-4 text-center"
   }, "All other regions, select Americas."))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bottom bg-gray-900 bg-opacity-75"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

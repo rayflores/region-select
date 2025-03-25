@@ -98,7 +98,7 @@ const RegionSelect = () => {
                 </h2>
               </div>
             </div>
-            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-0">
               <div className="grid grid-cols-1 gap-4 md:border-r-2 md:border-gray-600">
                 <div className="h-auto pe-5 flex flex-col gap-2 text-end">
                   <div className="font-semibold">Americas</div>
@@ -127,7 +127,7 @@ const RegionSelect = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 gap-4">
-              <p className="text-gray-500 p-4 m-4 text-center">
+              <p className="text-black p-4 m-4 text-center">
                 All other regions, select Americas.
               </p>
             </div>
