@@ -64,15 +64,17 @@ const RegionSelect = () => {
       );
 
       if (response.ok) {
-        if (regionId === "na") {
-          // Redirect to home page after setting cookie
-          window.location.href = wpData.homeUrl;
-        } else if (regionId === "uk") {
-          window.location.href = "https://bartongarnet.com/?lang=en";
-        } else {
-          // Redirect to home page after setting cookie
-          window.location.href = "https://bartongarnet.com/?lang=" + regionId;
-        }
+        setTimeout(() => {
+          if (regionId === "na") {
+            // Redirect to home page after setting cookie
+            window.location.href = wpData.homeUrl;
+          } else if (regionId === "uk") {
+            window.location.href = "https://bartongarnet.com/?lang=en";
+          } else {
+            // Redirect to home page after setting cookie
+            window.location.href = "https://bartongarnet.com/?lang=" + regionId;
+          }
+        }, 100); // 500ms delay
       }
     } catch (error) {
       console.error("Error setting region:", error);
