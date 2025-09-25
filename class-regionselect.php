@@ -38,8 +38,8 @@ class RegionSelect {
 
 		// Add a shortcode to display the div element where the React app will be rendered.
 		add_shortcode( 'region_select', array( $this, 'region_select_shortcode' ) );
-		// add_filter( 'avada_after_header_wrapper', array( $this, 'region_select_place_shortcode_before_content' ) );
-		add_filter( 'wp_body_open', array( $this, 'region_select_place_shortcode_before_content' ) );
+		add_filter( 'avada_after_header_wrapper', array( $this, 'region_select_place_shortcode_before_content' ) );
+		// add_filter( 'wp_body_open', array( $this, 'region_select_place_shortcode_before_content' ) );
 	}
 
 	/**
