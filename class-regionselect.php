@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 1.4.1
+ * Version: 1.6.0
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
@@ -38,7 +38,8 @@ class RegionSelect {
 
 		// Add a shortcode to display the div element where the React app will be rendered.
 		add_shortcode( 'region_select', array( $this, 'region_select_shortcode' ) );
-		add_filter( 'avada_after_header_wrapper', array( $this, 'region_select_place_shortcode_before_content' ) );
+		// add_filter( 'avada_after_header_wrapper', array( $this, 'region_select_place_shortcode_before_content' ) );
+		add_filter( 'wp_body_open', array( $this, 'region_select_place_shortcode_before_content' ) );
 	}
 
 	/**
@@ -50,34 +51,34 @@ class RegionSelect {
 		if ( is_admin() ) {
 			return;
 		}
-		if ( ! is_page( 10990 ) ) {
-			return;
-		}
+		// if ( ! is_page( 10990 ) ) {
+		// return;
+		// }
 
 		// add 'region-select' query arg.
-		// $url = add_query_arg( 'region-select', 'true', home_url() );
-		$url = add_query_arg( 'region-select', 'true', get_permalink( 10990 ) );
+		$url = add_query_arg( 'region-select', 'true', home_url() );
+		// $url = add_query_arg( 'region-select', 'true', get_permalink( 10990 ) );
 
 		if ( isset( $_GET['lang'] ) || isset( $_GET['region-select'] ) ) {
 			return;
 		}
 
-		// if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_front_page() ) {
-		if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_page( 10990 ) ) {
+		if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_front_page() ) {
+			// if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_page( 10990 ) ) {
 			// No cookie set and not on the home page.
 
 			header( 'Location: ' . $url );
-			// } elseif ( ! isset( $_COOKIE['selectedRegion'] ) && is_front_page() ) {
-		} elseif ( ! isset( $_COOKIE['selectedRegion'] ) && is_page( 10990 ) ) {
+		} elseif ( ! isset( $_COOKIE['selectedRegion'] ) && is_front_page() ) {
+			// } elseif ( ! isset( $_COOKIE['selectedRegion'] ) && is_page( 10990 ) ) {
 			// No cookie set and on the home page.
 
 			// add 'region-select' query arg.
 			header( 'Location: ' . $url );
 
-			// } elseif ( isset( $_COOKIE['selectedRegion'] ) && is_front_page() ) {
-		} elseif ( isset( $_COOKIE['selectedRegion'] ) && is_page( 10990 ) ) {
-			// header( 'Location: ' . home_url() . '/?lang=' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
-			header( 'Location: ' . get_permalink( 10990 ) . '/?lang=' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
+		} elseif ( isset( $_COOKIE['selectedRegion'] ) && is_front_page() ) {
+			// } elseif ( isset( $_COOKIE['selectedRegion'] ) && is_page( 10990 ) ) {
+			header( 'Location: ' . home_url() . '/?lang=' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
+			// header( 'Location: ' . get_permalink( 10990 ) . '/?lang=' . sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) ) );
 		} else {
 			return;
 		}
@@ -89,8 +90,8 @@ class RegionSelect {
 	 * @since 1.0
 	 */
 	public function enqueue_scripts() {
-		// if ( is_front_page() && ! isset( $_GET['lang'] ) && isset( $_GET['region-select'] ) ) {
-		if ( is_page( 10990 ) && ! isset( $_GET['lang'] ) && isset( $_GET['region-select'] ) ) {
+		if ( is_front_page() && ! isset( $_GET['lang'] ) && isset( $_GET['region-select'] ) ) {
+			// if ( is_page( 10990 ) && ! isset( $_GET['lang'] ) && isset( $_GET['region-select'] ) ) {
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react-dom' );
@@ -177,7 +178,7 @@ class RegionSelect {
 	 * Filter for avada theme before body content
 	 */
 	public function region_select_place_shortcode_before_content() {
-		if ( is_page( 10990 ) ) {
+		if ( is_front_page() ) {
 			echo do_shortcode( '[region_select]' );
 		}
 	}
