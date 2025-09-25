@@ -6,9 +6,30 @@ import "./styles/region-select.scss";
 const RegionSelect = () => {
   //   console.log("RegionSelect");
   const [loading, setLoading] = useState(false);
+  const [loadingRegion, setLoadingRegion] = useState(null);
   const [showDiv, setShowDiv] = useState(false);
 
+  // Function to check if the region cookie exists
+  const checkRegionCookie = () => {
+    const cookies = document.cookie.split(";");
+    const regionCookie = cookies.find((cookie) =>
+      cookie.trim().startsWith("selectedRegion=")
+    );
+
+    if (regionCookie) {
+      const regionValue = regionCookie.split("=")[1];
+      console.log("Region cookie found:", regionValue);
+      return regionValue;
+    }
+
+    console.log("No region cookie found");
+    return null;
+  };
+
   useEffect(() => {
+    // Check for existing region cookie when component mounts
+    const existingRegion = checkRegionCookie();
+
     // check url for region query param
     const urlParams = new URLSearchParams(window.location.search);
     const region = urlParams.get("region-select");
@@ -18,7 +39,7 @@ const RegionSelect = () => {
     } else {
       setShowDiv(false);
     }
-  });
+  }, []); // Added dependency array to run only on mount
 
   const regions = [
     {
@@ -50,6 +71,8 @@ const RegionSelect = () => {
 
   const handleRegionSelect = async (regionId) => {
     setLoading(true);
+    setLoadingRegion(regionId);
+    console.log("regionId", regionId);
     try {
       const response = await fetch(
         `${wpData.restUrl}region-select/v1/set-region`,
@@ -74,12 +97,14 @@ const RegionSelect = () => {
             // Redirect to home page after setting cookie
             window.location.href = "https://bartongarnet.com/?lang=" + regionId;
           }
-        }, 100); // 500ms delay
+        }, 100);
       }
     } catch (error) {
       console.error("Error setting region:", error);
+      setLoading(false);
+      setLoadingRegion(null);
     }
-    setLoading(false);
+    // Note: We don't set loading to false here because we're redirecting
   };
 
   if (!showDiv) {
@@ -104,13 +129,22 @@ const RegionSelect = () => {
                 <div className="h-auto pe-0 md:pe-5 flex flex-col gap-2 text-center md:text-end">
                   <div className="font-semibold">Americas</div>
                   <div
-                    className="h-auto pe-0 p-2 flex flex-col gap-2 lang-select text-center md:text-end cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105"
+                    className="h-auto pe-0 p-2 flex flex-col gap-2 lang-select text-center md:text-end cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105 relative"
                     style={{ "--hover-color": "#c20430" }}
                     onMouseEnter={(e) => (e.target.style.color = "#c20430")}
                     onMouseLeave={(e) => (e.target.style.color = "")}
                     onClick={() => handleRegionSelect("na")}
                   >
-                    English
+                    <div className="flex items-center justify-center gap-2">
+                      {loadingRegion === "na" ? (
+                        <>
+                          <div className="animate-spin h-4 w-4 border-2 border-gray-300 border-t-red-600 rounded-full"></div>
+                          <span>Redirecting...</span>
+                        </>
+                      ) : (
+                        "English"
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -120,13 +154,22 @@ const RegionSelect = () => {
                   {regions.map((region) => (
                     <div key={region.id} className="">
                       <div
-                        className="h-auto md:ps-0 p-2 flex flex-col gap-2 lang-select text-center md:text-start cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105"
+                        className="h-auto md:ps-0 p-2 flex flex-col gap-2 lang-select text-center md:text-start cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105 relative"
                         style={{ "--hover-color": "#c20430" }}
                         onMouseEnter={(e) => (e.target.style.color = "#c20430")}
                         onMouseLeave={(e) => (e.target.style.color = "")}
                         onClick={() => handleRegionSelect(region.id)}
                       >
-                        {region.languages.join(", ")}
+                        <div className="flex items-center justify-center gap-2">
+                          {loadingRegion === region.id ? (
+                            <>
+                              <div className="animate-spin h-4 w-4 border-2 border-gray-300 border-t-red-600 rounded-full"></div>
+                              <span>Redirecting...</span>
+                            </>
+                          ) : (
+                            region.languages.join(", ")
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
