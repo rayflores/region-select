@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 1.7.6
+ * Version: 1.7.7
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
@@ -39,7 +39,7 @@ class RegionSelect {
 		// Add a shortcode to display the div element where the React app will be rendered.
 		add_shortcode( 'region_select', array( $this, 'region_select_shortcode' ) );
 		add_filter( 'avada_after_header_wrapper', array( $this, 'region_select_place_shortcode_before_content' ) );
-		add_filter( 'wp_body_open', array( $this, 'region_select_place_shortcode_before_content' ) );
+		// add_filter( 'wp_body_open', array( $this, 'region_select_place_shortcode_before_content' ) );
 	}
 
 	/**
