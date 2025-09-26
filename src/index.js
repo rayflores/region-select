@@ -18,34 +18,38 @@ const RegionSelect = () => {
 
     if (regionCookie) {
       const regionValue = regionCookie.split("=")[1];
-      console.log("Region cookie found:", regionValue);
       return regionValue;
     }
 
-    console.log("No region cookie found");
     return null;
   };
 
   useEffect(() => {
-    // Debug: Show all cookies
-    console.log("ALL COOKIES:", document.cookie);
+    // Dynamically detect and set header height
+    const detectHeaderHeight = () => {
+      const header = document.querySelector(
+        "header, .fusion-header-wrapper, .site-header, #masthead, .header"
+      );
+      if (header) {
+        const headerHeight = header.offsetHeight;
+        document.documentElement.style.setProperty(
+          "--header-height",
+          `${headerHeight}px`
+        );
+      }
+    };
+
+    detectHeaderHeight();
+    // Re-detect on window resize
+    window.addEventListener("resize", detectHeaderHeight);
 
     // Check for existing region cookie when component mounts
     const existingRegion = checkRegionCookie();
 
-    console.log(
-      "React component loaded. Existing region cookie:",
-      existingRegion
-    );
-    console.log("Current URL:", window.location.href);
-    console.log("wpData.homeUrl:", wpData.homeUrl);
-
     // If we have a valid cookie, redirect immediately instead of showing the selector
     if (existingRegion) {
-      console.log("Cookie found, redirecting based on region:", existingRegion);
       if (existingRegion === "na") {
         // For North America, redirect to clean home page
-        console.log("Redirecting NA region to:", wpData.homeUrl);
         window.location.href = wpData.homeUrl;
         return;
       } else if (existingRegion === "uk") {
@@ -59,19 +63,27 @@ const RegionSelect = () => {
       }
     }
 
-    // Only show the selector if no cookie exists and region-select param is present
+    // Only show the selector if no cookie exists and geoselection param is present
     const urlParams = new URLSearchParams(window.location.search);
-    const regionSelectParam = urlParams.get("region-select");
+    const geoselectionParam = urlParams.get("geoselection");
 
-    console.log("Region select param:", regionSelectParam);
+    console.log("Current URL:", window.location.href);
+    console.log("Geoselection param:", geoselectionParam);
+    console.log("Existing region cookie:", existingRegion);
+    console.log("wpData:", wpData);
 
-    if (regionSelectParam && !existingRegion) {
-      console.log("No cookie found, showing region selector");
+    if (geoselectionParam && !existingRegion) {
+      console.log("Showing region selector");
       setShowDiv(true);
     } else {
-      console.log("Not showing region selector");
+      console.log("NOT showing region selector");
       setShowDiv(false);
     }
+
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener("resize", detectHeaderHeight);
+    };
   }, []); // Added dependency array to run only on mount
 
   const regions = [
@@ -103,10 +115,14 @@ const RegionSelect = () => {
   ];
 
   const handleRegionSelect = async (regionId) => {
+    console.log("handleRegionSelect called with:", regionId);
     setLoading(true);
     setLoadingRegion(regionId);
-    console.log("regionId", regionId);
     try {
+      console.log(
+        "Making REST API call to:",
+        `${wpData.restUrl}region-select/v1/set-region`
+      );
       const response = await fetch(
         `${wpData.restUrl}region-select/v1/set-region`,
         {
@@ -119,26 +135,21 @@ const RegionSelect = () => {
         }
       );
 
+      console.log("Response status:", response.status);
       if (response.ok) {
         console.log("REST API response successful");
-
-        // Set cookie on frontend as well to ensure it's immediately available
+        // Set cookie on frontend to ensure it's immediately available
         const domain = window.location.hostname;
         const cookieString = `selectedRegion=${regionId}; path=/; domain=${domain}; max-age=${
           30 * 24 * 60 * 60
         }`;
-        console.log("Setting cookie with domain:", cookieString);
+        console.log("Setting cookie:", cookieString);
         document.cookie = cookieString;
-
-        // Verify cookie was set
-        console.log("Cookie after setting:", document.cookie);
-        const verification = checkRegionCookie();
-        console.log("Cookie verification:", verification);
 
         setTimeout(() => {
           if (regionId === "na") {
-            // Redirect to home page after setting cookie (remove region-select param)
-            console.log("About to redirect NA to:", wpData.homeUrl);
+            // Redirect to home page after setting cookie (remove geoselection param)
+            console.log("Redirecting to:", wpData.homeUrl);
             window.location.href = wpData.homeUrl;
           } else if (regionId === "uk") {
             window.location.href = "https://bartongarnet.com/?lang=en";
