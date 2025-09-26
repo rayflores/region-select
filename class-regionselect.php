@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 1.7.2
+ * Version: 1.7.3
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
@@ -62,7 +62,7 @@ class RegionSelect {
 		}
 
 		// If region-select param is present, don't redirect - let the React component handle it
-		if ( isset( $_GET['region-select'] ) ) {
+		if ( isset( $_GET['region-select'] ) && ! isset( $_COOKIE['selectedRegion'] ) ) {
 			return;
 		}
 
