@@ -87,9 +87,14 @@ const RegionSelect = () => {
       );
 
       if (response.ok) {
+        // Set cookie on frontend as well to ensure it's immediately available
+        document.cookie = `selectedRegion=${regionId}; path=/; max-age=${
+          30 * 24 * 60 * 60
+        }`;
+
         setTimeout(() => {
           if (regionId === "na") {
-            // Redirect to home page after setting cookie
+            // Redirect to home page after setting cookie (remove region-select param)
             window.location.href = wpData.homeUrl;
           } else if (regionId === "uk") {
             window.location.href = "https://bartongarnet.com/?lang=en";
@@ -97,7 +102,7 @@ const RegionSelect = () => {
             // Redirect to home page after setting cookie
             window.location.href = "https://bartongarnet.com/?lang=" + regionId;
           }
-        }, 100);
+        }, 200);
       }
     } catch (error) {
       console.error("Error setting region:", error);
