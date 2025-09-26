@@ -30,13 +30,40 @@ const RegionSelect = () => {
     // Check for existing region cookie when component mounts
     const existingRegion = checkRegionCookie();
 
-    // check url for region query param
+    console.log(
+      "React component loaded. Existing region cookie:",
+      existingRegion
+    );
+
+    // If we have a valid cookie, redirect immediately instead of showing the selector
+    if (existingRegion) {
+      console.log("Cookie found, redirecting based on region:", existingRegion);
+      if (existingRegion === "na") {
+        // For North America, redirect to clean home page
+        window.location.href = wpData.homeUrl;
+        return;
+      } else if (existingRegion === "uk") {
+        window.location.href = "https://bartongarnet.com/?lang=en";
+        return;
+      } else {
+        // For other regions, redirect to home page with lang param
+        window.location.href =
+          "https://bartongarnet.com/?lang=" + existingRegion;
+        return;
+      }
+    }
+
+    // Only show the selector if no cookie exists and region-select param is present
     const urlParams = new URLSearchParams(window.location.search);
-    const region = urlParams.get("region-select");
-    if (region) {
-      console.log("region", region);
+    const regionSelectParam = urlParams.get("region-select");
+
+    console.log("Region select param:", regionSelectParam);
+
+    if (regionSelectParam && !existingRegion) {
+      console.log("No cookie found, showing region selector");
       setShowDiv(true);
     } else {
+      console.log("Not showing region selector");
       setShowDiv(false);
     }
   }, []); // Added dependency array to run only on mount

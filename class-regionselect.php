@@ -56,33 +56,43 @@ class RegionSelect {
 			return;
 		}
 
+		// Debug logging
+		error_log( 'Region Select Debug: Current URL: ' . $_SERVER['REQUEST_URI'] );
+		error_log( 'Region Select Debug: Cookie value: ' . ( isset( $_COOKIE['selectedRegion'] ) ? $_COOKIE['selectedRegion'] : 'NOT SET' ) );
+
 		// If lang param is present, don't redirect - user is already on a language-specific page
 		if ( isset( $_GET['lang'] ) ) {
+			error_log( 'Region Select Debug: Lang param present, staying on page' );
 			return;
 		}
 
-		// If region-select param is present, don't redirect - let the React component handle it
-		if ( isset( $_GET['region-select'] ) ) {
-			return;
-		}
-
-		// Check if region cookie exists
+		// Check if region cookie exists FIRST
 		if ( isset( $_COOKIE['selectedRegion'] ) ) {
 			$region = sanitize_text_field( wp_unslash( $_COOKIE['selectedRegion'] ) );
+			error_log( 'Region Select Debug: Cookie found with region: ' . $region );
 
-			if ( $region === 'na' ) {
+			if ( 'na' === $region ) {
 				// For North America, stay on home page without any redirects
+				error_log( 'Region Select Debug: NA region, staying on home page' );
 				return;
 			} else {
 				// For other regions, redirect to home page with lang param
-				header( 'Location: ' . home_url() . '/?lang=' . $region );
+				error_log( 'Region Select Debug: Non-NA region, redirecting to lang page' );
+				wp_redirect( home_url() . '/?lang=' . $region );
 				exit;
 			}
 		}
 
+		// If region-select param is present, don't redirect - let the React component handle it
+		if ( isset( $_GET['region-select'] ) ) {
+			error_log( 'Region Select Debug: Region-select param present, letting React handle' );
+			return;
+		}
+
 		// Only redirect to region-select page if no cookie is set
+		error_log( 'Region Select Debug: No cookie found, redirecting to region-select page' );
 		$url = add_query_arg( 'region-select', 'true', home_url() );
-		header( 'Location: ' . $url );
+		wp_redirect( $url );
 		exit;
 	}
 
