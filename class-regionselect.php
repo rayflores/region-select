@@ -59,33 +59,25 @@ class RegionSelect {
 			return;
 		}
 
-		// Check if we're being referred from our region select page.
-		$referrer = wp_get_referer();
-		if ( $referrer && $this->region_page_id ) {
-			$region_page_url = get_permalink( $this->region_page_id );
+		// Check if we have a region parameter from region selection.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Temporary parameter for region selection flow
+		if ( isset( $_GET['region'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Temporary parameter for region selection flow
+			$region = sanitize_text_field( wp_unslash( $_GET['region'] ) );
 
-			// If referrer matches our region select page, check for region in session/temporary storage.
-			if ( strpos( $referrer, $region_page_url ) !== false ) {
-				// Check if we have a region parameter (temporary, will be cleaned up).
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Temporary parameter for region selection flow
-				if ( isset( $_GET['region'] ) ) {
-					// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Temporary parameter for region selection flow
-					$region = sanitize_text_field( wp_unslash( $_GET['region'] ) );
+			// Set the cookie server-side to ensure it's properly set.
+			setcookie( 'selectedRegion', $region, time() + ( 30 * DAY_IN_SECONDS ), COOKIEPATH, COOKIE_DOMAIN );
 
-					// Set the cookie server-side to ensure it's properly set.
-					setcookie( 'selectedRegion', $region, time() + ( 30 * DAY_IN_SECONDS ), COOKIEPATH, COOKIE_DOMAIN );
-
-					// Redirect to clean URL based on region.
-					if ( 'na' === $region ) {
-						wp_safe_redirect( home_url() );
-					} elseif ( 'uk' === $region ) {
-						wp_safe_redirect( 'https://bartongarnet.com/?lang=en' );
-					} else {
-						wp_safe_redirect( 'https://bartongarnet.com/?lang=' . $region );
-					}
-					exit;
-				}
+			// Redirect to clean URL based on region.
+			if ( 'na' === $region ) {
+				// For North America, redirect to home page with lang=na to avoid loop.
+				wp_safe_redirect( home_url() . '?lang=na' );
+			} elseif ( 'uk' === $region ) {
+				wp_safe_redirect( 'https://bartongarnet.com/?lang=en' );
+			} else {
+				wp_safe_redirect( 'https://bartongarnet.com/?lang=' . $region );
 			}
+			exit;
 		}
 
 		// Only redirect to region-select page if no cookie is set.
