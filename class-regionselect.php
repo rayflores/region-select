@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 1.7.5
+ * Version: 1.7.6
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
@@ -57,6 +57,10 @@ class RegionSelect {
 		}
 
 		// Debug logging
+		$debug_msg  = 'Region Select Debug: Current URL: ' . $_SERVER['REQUEST_URI'] . "\n";
+		$debug_msg .= 'Region Select Debug: Cookie value: ' . ( isset( $_COOKIE['selectedRegion'] ) ? $_COOKIE['selectedRegion'] : 'NOT SET' ) . "\n";
+		file_put_contents( __DIR__ . '/debug.log', date( 'Y-m-d H:i:s' ) . ' - ' . $debug_msg, FILE_APPEND );
+
 		error_log( 'Region Select Debug: Current URL: ' . $_SERVER['REQUEST_URI'] );
 		error_log( 'Region Select Debug: Cookie value: ' . ( isset( $_COOKIE['selectedRegion'] ) ? $_COOKIE['selectedRegion'] : 'NOT SET' ) );
 
@@ -165,8 +169,15 @@ class RegionSelect {
 	 */
 	public function set_region_cookie( $request ) {
 		$region = $request->get_param( 'region' );
-		setcookie( 'selectedRegion', $region, time() + ( 30 * DAY_IN_SECONDS ), COOKIEPATH, COOKIE_DOMAIN );
-		return new WP_REST_Response( array( 'success' => true ), 200 );
+		// Let JavaScript handle cookie setting to avoid conflicts
+		// setcookie( 'selectedRegion', $region, time() + ( 30 * DAY_IN_SECONDS ), COOKIEPATH, COOKIE_DOMAIN );
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'region'  => $region,
+			),
+			200
+		);
 	}
 
 	/**

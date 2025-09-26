@@ -27,6 +27,9 @@ const RegionSelect = () => {
   };
 
   useEffect(() => {
+    // Debug: Show all cookies
+    console.log("ALL COOKIES:", document.cookie);
+
     // Check for existing region cookie when component mounts
     const existingRegion = checkRegionCookie();
 
@@ -34,12 +37,15 @@ const RegionSelect = () => {
       "React component loaded. Existing region cookie:",
       existingRegion
     );
+    console.log("Current URL:", window.location.href);
+    console.log("wpData.homeUrl:", wpData.homeUrl);
 
     // If we have a valid cookie, redirect immediately instead of showing the selector
     if (existingRegion) {
       console.log("Cookie found, redirecting based on region:", existingRegion);
       if (existingRegion === "na") {
         // For North America, redirect to clean home page
+        console.log("Redirecting NA region to:", wpData.homeUrl);
         window.location.href = wpData.homeUrl;
         return;
       } else if (existingRegion === "uk") {
@@ -114,14 +120,25 @@ const RegionSelect = () => {
       );
 
       if (response.ok) {
+        console.log("REST API response successful");
+
         // Set cookie on frontend as well to ensure it's immediately available
-        document.cookie = `selectedRegion=${regionId}; path=/; max-age=${
+        const domain = window.location.hostname;
+        const cookieString = `selectedRegion=${regionId}; path=/; domain=${domain}; max-age=${
           30 * 24 * 60 * 60
         }`;
+        console.log("Setting cookie with domain:", cookieString);
+        document.cookie = cookieString;
+
+        // Verify cookie was set
+        console.log("Cookie after setting:", document.cookie);
+        const verification = checkRegionCookie();
+        console.log("Cookie verification:", verification);
 
         setTimeout(() => {
           if (regionId === "na") {
             // Redirect to home page after setting cookie (remove region-select param)
+            console.log("About to redirect NA to:", wpData.homeUrl);
             window.location.href = wpData.homeUrl;
           } else if (regionId === "uk") {
             window.location.href = "https://bartongarnet.com/?lang=en";
