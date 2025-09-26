@@ -25,28 +25,10 @@ const RegionSelect = () => {
   };
 
   useEffect(() => {
-    // Dynamically detect and set header height
-    const detectHeaderHeight = () => {
-      const header = document.querySelector(
-        "header, .fusion-header-wrapper, .site-header, #masthead, .header"
-      );
-      if (header) {
-        const headerHeight = header.offsetHeight;
-        document.documentElement.style.setProperty(
-          "--header-height",
-          `${headerHeight}px`
-        );
-      }
-    };
-
-    detectHeaderHeight();
-    // Re-detect on window resize
-    window.addEventListener("resize", detectHeaderHeight);
-
     // Check for existing region cookie when component mounts
     const existingRegion = checkRegionCookie();
 
-    // If we have a valid cookie, redirect immediately instead of showing the selector
+    // If we have a valid cookie, redirect immediately to appropriate location
     if (existingRegion) {
       if (existingRegion === "na") {
         // For North America, redirect to clean home page
@@ -63,27 +45,8 @@ const RegionSelect = () => {
       }
     }
 
-    // Only show the selector if no cookie exists and geoselection param is present
-    const urlParams = new URLSearchParams(window.location.search);
-    const geoselectionParam = urlParams.get("geoselection");
-
-    console.log("Current URL:", window.location.href);
-    console.log("Geoselection param:", geoselectionParam);
-    console.log("Existing region cookie:", existingRegion);
-    console.log("wpData:", wpData);
-
-    if (geoselectionParam && !existingRegion) {
-      console.log("Showing region selector");
-      setShowDiv(true);
-    } else {
-      console.log("NOT showing region selector");
-      setShowDiv(false);
-    }
-
-    // Cleanup event listener
-    return () => {
-      window.removeEventListener("resize", detectHeaderHeight);
-    };
+    // Since we're on the dedicated region select page, always show the selector
+    setShowDiv(true);
   }, []); // Added dependency array to run only on mount
 
   const regions = [
@@ -115,14 +78,9 @@ const RegionSelect = () => {
   ];
 
   const handleRegionSelect = async (regionId) => {
-    console.log("handleRegionSelect called with:", regionId);
     setLoading(true);
     setLoadingRegion(regionId);
     try {
-      console.log(
-        "Making REST API call to:",
-        `${wpData.restUrl}region-select/v1/set-region`
-      );
       const response = await fetch(
         `${wpData.restUrl}region-select/v1/set-region`,
         {
@@ -135,21 +93,17 @@ const RegionSelect = () => {
         }
       );
 
-      console.log("Response status:", response.status);
       if (response.ok) {
-        console.log("REST API response successful");
         // Set cookie on frontend to ensure it's immediately available
         const domain = window.location.hostname;
         const cookieString = `selectedRegion=${regionId}; path=/; domain=${domain}; max-age=${
           30 * 24 * 60 * 60
         }`;
-        console.log("Setting cookie:", cookieString);
         document.cookie = cookieString;
 
         setTimeout(() => {
           if (regionId === "na") {
-            // Redirect to home page after setting cookie (remove geoselection param)
-            console.log("Redirecting to:", wpData.homeUrl);
+            // Redirect to home page after setting cookie (remove region-select param)
             window.location.href = wpData.homeUrl;
           } else if (regionId === "uk") {
             window.location.href = "https://bartongarnet.com/?lang=en";

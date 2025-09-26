@@ -20,27 +20,9 @@ $transition-speed: 0.2s;
   justify-content: center;
 }
 
-// Main container - Nike-style full screen overlay snug to header
+// Main container
 #region-select-root {
-    // Create full-screen overlay starting below header
-    position: fixed;
-    top: var(--header-height, 80px); // Default 80px, can be overridden
-    left: 0;
-    width: 100%;
-    height: calc(100vh - var(--header-height, 80px));
-    z-index: 9999;
-    
-    // Full white background (like Nike)
     background-color: #fff;
-    
-    // Make content fill entire space
-    display: block;
-    
-    // Animate in
-    transform: translateY(20px);
-    opacity: 0;
-    animation: slideInFade 0.4s ease forwards;
-    
     .lang-select {
         cursor: pointer;
         &:hover {
@@ -50,35 +32,28 @@ $transition-speed: 0.2s;
     }
 }
 
-// Animation for the full screen overlay
-@keyframes slideInFade {
-    to {
-        transform: translateY(0);
-        opacity: 1;
+
+/**
+Remove Menu From Main Navigation
+**/
+.fusion-secondary-header {
+    display: none;
+}
+nav {
+    &.fusion-main-menu {
+        display: none;
     }
+}
+// Remove Main Content
+#sliders-container {
+    display: none;
+}
+h1.entry-title { 
+    display: none;
+}
+// Remove Footer
+.fusion-footer {
+    display: none;
 }
 
-// Header height detection for different themes
-body {
-    // Avada theme header detection
-    &.avada-header-v1 #region-select-root,
-    &.avada-header-v2 #region-select-root,
-    &.avada-header-v3 #region-select-root {
-        top: var(--awb-header-height, 90px);
-        height: calc(100vh - var(--awb-header-height, 90px));
-    }
-    
-    // Generic WordPress themes
-    &.admin-bar #region-select-root {
-        top: calc(var(--header-height, 80px) + 32px); // Add admin bar height
-        height: calc(100vh - var(--header-height, 80px) - 32px);
-    }
-    
-    // Mobile admin bar
-    @media screen and (max-width: 782px) {
-        &.admin-bar #region-select-root {
-            top: calc(var(--header-height, 80px) + 46px); // Mobile admin bar height
-            height: calc(100vh - var(--header-height, 80px) - 46px);
-        }
-    }
-}
+
