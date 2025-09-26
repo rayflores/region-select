@@ -61,10 +61,10 @@ class RegionSelect {
 			return;
 		}
 
-		// If region-select param is present, don't redirect - let the React component handle it
-		if ( isset( $_GET['region-select'] ) ) {
-			return;
-		}
+		// // If region-select param is present, don't redirect - let the React component handle it
+		// if ( isset( $_GET['region-select'] ) ) {
+		// return;
+		// }
 
 		// Check if region cookie exists
 		if ( isset( $_COOKIE['selectedRegion'] ) ) {
@@ -92,7 +92,7 @@ class RegionSelect {
 	 * @since 1.0
 	 */
 	public function enqueue_scripts() {
-		if ( is_front_page() && ! isset( $_GET['lang'] ) && isset( $_GET['region-select'] ) ) {
+		if ( is_front_page() || is_home() ) {
 			// if ( is_page( 10990 ) && ! isset( $_GET['lang'] ) && isset( $_GET['region-select'] ) ) {
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react' );
