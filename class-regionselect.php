@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
@@ -58,7 +58,38 @@ class RegionSelect {
 		if ( is_admin() ) {
 			return;
 		}
+
+		// Check if we're being referred from our region select page.
+		$referrer = wp_get_referer();
+		if ( $referrer && $this->region_page_id ) {
+			$region_page_url = get_permalink( $this->region_page_id );
+
+			// If referrer matches our region select page, check for region in session/temporary storage.
+			if ( strpos( $referrer, $region_page_url ) !== false ) {
+				// Check if we have a region parameter (temporary, will be cleaned up).
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Temporary parameter for region selection flow
+				if ( isset( $_GET['region'] ) ) {
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Temporary parameter for region selection flow
+					$region = sanitize_text_field( wp_unslash( $_GET['region'] ) );
+
+					// Set the cookie server-side to ensure it's properly set.
+					setcookie( 'selectedRegion', $region, time() + ( 30 * DAY_IN_SECONDS ), COOKIEPATH, COOKIE_DOMAIN );
+
+					// Redirect to clean URL based on region.
+					if ( 'na' === $region ) {
+						wp_safe_redirect( home_url() );
+					} elseif ( 'uk' === $region ) {
+						wp_safe_redirect( 'https://bartongarnet.com/?lang=en' );
+					} else {
+						wp_safe_redirect( 'https://bartongarnet.com/?lang=' . $region );
+					}
+					exit;
+				}
+			}
+		}
+
 		// Only redirect to region-select page if no cookie is set.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- URL parameter check for redirect logic, no form processing
 		if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_page( $this->region_page_id ) && ! isset( $_GET['lang'] ) ) {
 			wp_safe_redirect( get_permalink( $this->region_page_id ) );
 			exit;
@@ -72,7 +103,6 @@ class RegionSelect {
 	 */
 	public function enqueue_scripts() {
 		if ( is_page( $this->region_page_id ) ) {
-			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react' );
 			wp_enqueue_script( 'react-dom' );
 

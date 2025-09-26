@@ -41,24 +41,10 @@ const RegionSelect = () => {
     setLoading(true);
     setLoadingRegion(regionId);
 
-    // Set cookie directly
-    const domain = window.location.hostname;
-    const cookieString = `selectedRegion=${regionId}; path=/; domain=${domain}; max-age=${
-      30 * 24 * 60 * 60
-    }`;
-    document.cookie = cookieString;
-
-    // Short delay to show loading state, then redirect
+    // Short delay to show loading state, then redirect to home with region parameter
+    // PHP will handle cookie setting and final redirect
     setTimeout(() => {
-      if (regionId === "na") {
-        // Redirect to home page for North America
-        window.location.href = wpData.homeUrl;
-      } else if (regionId === "uk") {
-        window.location.href = "https://bartongarnet.com/?lang=en";
-      } else {
-        // Redirect to home page with lang parameter for other regions
-        window.location.href = "https://bartongarnet.com/?lang=" + regionId;
-      }
+      window.location.href = wpData.homeUrl + "?region=" + regionId;
     }, 500); // Slightly longer delay to show the loading animation
   };
 
