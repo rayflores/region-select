@@ -4,50 +4,10 @@ import { Globe } from "lucide-react";
 import "./styles/region-select.scss";
 
 const RegionSelect = () => {
-  //   console.log("RegionSelect");
   const [loading, setLoading] = useState(false);
   const [loadingRegion, setLoadingRegion] = useState(null);
-  const [showDiv, setShowDiv] = useState(false);
 
-  // Function to check if the region cookie exists
-  const checkRegionCookie = () => {
-    const cookies = document.cookie.split(";");
-    const regionCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith("selectedRegion=")
-    );
-
-    if (regionCookie) {
-      const regionValue = regionCookie.split("=")[1];
-      return regionValue;
-    }
-
-    return null;
-  };
-
-  useEffect(() => {
-    // Check for existing region cookie when component mounts
-    const existingRegion = checkRegionCookie();
-
-    // If we have a valid cookie, redirect immediately to appropriate location
-    if (existingRegion) {
-      if (existingRegion === "na") {
-        // For North America, redirect to clean home page
-        window.location.href = wpData.homeUrl;
-        return;
-      } else if (existingRegion === "uk") {
-        window.location.href = "https://bartongarnet.com/?lang=en";
-        return;
-      } else {
-        // For other regions, redirect to home page with lang param
-        window.location.href =
-          "https://bartongarnet.com/?lang=" + existingRegion;
-        return;
-      }
-    }
-
-    // Since we're on the dedicated region select page, always show the selector
-    setShowDiv(true);
-  }, []); // Added dependency array to run only on mount
+  // No need for useEffect or cookie checking - this page always shows the selector
 
   const regions = [
     {
@@ -77,53 +37,30 @@ const RegionSelect = () => {
     },
   ];
 
-  const handleRegionSelect = async (regionId) => {
+  const handleRegionSelect = (regionId) => {
     setLoading(true);
     setLoadingRegion(regionId);
-    try {
-      const response = await fetch(
-        `${wpData.restUrl}region-select/v1/set-region`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-WP-Nonce": wpData.nonce,
-          },
-          body: JSON.stringify({ region: regionId }),
-        }
-      );
 
-      if (response.ok) {
-        // Set cookie on frontend to ensure it's immediately available
-        const domain = window.location.hostname;
-        const cookieString = `selectedRegion=${regionId}; path=/; domain=${domain}; max-age=${
-          30 * 24 * 60 * 60
-        }`;
-        document.cookie = cookieString;
+    // Set cookie directly
+    const domain = window.location.hostname;
+    const cookieString = `selectedRegion=${regionId}; path=/; domain=${domain}; max-age=${
+      30 * 24 * 60 * 60
+    }`;
+    document.cookie = cookieString;
 
-        setTimeout(() => {
-          if (regionId === "na") {
-            // Redirect to home page after setting cookie (remove region-select param)
-            window.location.href = wpData.homeUrl;
-          } else if (regionId === "uk") {
-            window.location.href = "https://bartongarnet.com/?lang=en";
-          } else {
-            // Redirect to home page after setting cookie
-            window.location.href = "https://bartongarnet.com/?lang=" + regionId;
-          }
-        }, 200);
+    // Short delay to show loading state, then redirect
+    setTimeout(() => {
+      if (regionId === "na") {
+        // Redirect to home page for North America
+        window.location.href = wpData.homeUrl;
+      } else if (regionId === "uk") {
+        window.location.href = "https://bartongarnet.com/?lang=en";
+      } else {
+        // Redirect to home page with lang parameter for other regions
+        window.location.href = "https://bartongarnet.com/?lang=" + regionId;
       }
-    } catch (error) {
-      console.error("Error setting region:", error);
-      setLoading(false);
-      setLoadingRegion(null);
-    }
-    // Note: We don't set loading to false here because we're redirecting
+    }, 500); // Slightly longer delay to show the loading animation
   };
-
-  if (!showDiv) {
-    return <div className="hidden"></div>;
-  }
 
   return (
     <>

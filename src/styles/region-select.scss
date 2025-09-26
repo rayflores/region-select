@@ -44,6 +44,10 @@ nav {
         display: none;
     }
 }
+// Remove title bar
+.avada-page-titlebar-wrapper {
+    display: none;
+}
 // Remove Main Content
 #sliders-container {
     display: none;
