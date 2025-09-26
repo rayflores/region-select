@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 2.1.0
+ * Version: 2.2.0
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
@@ -59,24 +59,14 @@ class RegionSelect {
 			return;
 		}
 
-		// Check if we have a region parameter from region selection.
+		// Check if we have a region parameter from region selection (North America only).
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Temporary parameter for region selection flow
-		if ( isset( $_GET['region'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Temporary parameter for region selection flow
-			$region = sanitize_text_field( wp_unslash( $_GET['region'] ) );
+		if ( isset( $_GET['region'] ) && 'na' === $_GET['region'] ) {
+			// Set the cookie server-side to ensure it's properly set for North America.
+			setcookie( 'selectedRegion', 'na', time() + ( 30 * DAY_IN_SECONDS ), COOKIEPATH, COOKIE_DOMAIN );
 
-			// Set the cookie server-side to ensure it's properly set.
-			setcookie( 'selectedRegion', $region, time() + ( 30 * DAY_IN_SECONDS ), COOKIEPATH, COOKIE_DOMAIN );
-
-			// Redirect to clean URL based on region.
-			if ( 'na' === $region ) {
-				// For North America, redirect to home page with lang=na to avoid loop.
-				wp_safe_redirect( home_url() . '?lang=na' );
-			} elseif ( 'uk' === $region ) {
-				wp_safe_redirect( 'https://bartongarnet.com/?lang=en' );
-			} else {
-				wp_safe_redirect( 'https://bartongarnet.com/?lang=' . $region );
-			}
+			// Redirect to clean home URL with lang parameter.
+			wp_safe_redirect( home_url() . '?lang=na' );
 			exit;
 		}
 
