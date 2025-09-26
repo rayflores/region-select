@@ -58,25 +58,8 @@ class RegionSelect {
 		if ( is_admin() ) {
 			return;
 		}
-
-		// Don't redirect if we're already on the region select page.
-		if ( is_page( $this->region_page_id ) ) {
-			return;
-		}
-
-		// Only check on front page.
-		if ( ! is_front_page() ) {
-			return;
-		}
-
-		// If lang param is present, don't redirect - user is already on a language-specific page.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- URL parameter check for redirect logic, no form processing
-		if ( isset( $_GET['lang'] ) ) {
-			return;
-		}
-
 		// Only redirect to region-select page if no cookie is set.
-		if ( ! isset( $_COOKIE['selectedRegion'] ) && $this->region_page_id ) {
+		if ( ! isset( $_COOKIE['selectedRegion'] ) && ! is_page( $this->region_page_id ) && ! isset( $_GET['lang'] ) ) {
 			wp_safe_redirect( get_permalink( $this->region_page_id ) );
 			exit;
 		}
