@@ -90,7 +90,7 @@ const RegionSelect = () => {
                     onMouseLeave={(e) => (e.target.style.color = "")}
                     onClick={() => handleRegionSelect("na")}
                   >
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center md:justify-end gap-2">
                       {loadingRegion === "na" ? (
                         <>
                           <div className="animate-spin h-4 w-4 border-2 border-gray-300 border-t-red-600 rounded-full"></div>
@@ -115,7 +115,7 @@ const RegionSelect = () => {
                         onMouseLeave={(e) => (e.target.style.color = "")}
                         onClick={() => handleRegionSelect(region.id)}
                       >
-                        <div className="flex items-center justify-center gap-2">
+                        <div className="flex items-center justify-center md:justify-start gap-2">
                           {loadingRegion === region.id ? (
                             <>
                               <div className="animate-spin h-4 w-4 border-2 border-gray-300 border-t-red-600 rounded-full"></div>
