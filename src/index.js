@@ -7,7 +7,40 @@ const RegionSelect = () => {
   const [loading, setLoading] = useState(false);
   const [loadingRegion, setLoadingRegion] = useState(null);
 
-  // No need for useEffect or cookie checking - this page always shows the selector
+  // UseEffect for cookie checking - automatically redirect if cookie exists
+  useEffect(() => {
+    // Function to get cookie value by name
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(";").shift();
+      return null;
+    };
+
+    // Check for existing region cookie
+    const currentRegion = getCookie("selectedRegion");
+
+    if (currentRegion) {
+      setLoading(true);
+      setLoadingRegion(currentRegion);
+
+      // Redirect based on the stored region
+      setTimeout(() => {
+        if (currentRegion === "na") {
+          // For North America, redirect to home with lang parameter
+          window.location.href = wpData.homeUrl + "?lang=na";
+        } else {
+          // For European regions, redirect to bartongarnet with appropriate language
+          if (currentRegion === "uk") {
+            window.location.href = "https://bartongarnet.com/?lang=en";
+          } else {
+            window.location.href =
+              "https://bartongarnet.com/?lang=" + currentRegion;
+          }
+        }
+      }, 500);
+    }
+  }, []);
 
   const regions = [
     {
@@ -65,6 +98,38 @@ const RegionSelect = () => {
       }
     }, 500); // Slightly longer delay to show the loading animation
   };
+
+  // Show loading screen when automatically redirecting
+  if (loading && loadingRegion) {
+    return (
+      <>
+        <div className="top">
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="p-4 text-center">
+              <div className="p-8">
+                <div className="flex items-center justify-center gap-2 mb-6">
+                  <Globe className="h-6 w-6 text-gray-500" />
+                  <h2 className="text-xxl font-semibold text-gray-500 m-0">
+                    Redirecting to Your Region
+                  </h2>
+                </div>
+                <div className="flex items-center justify-center gap-2 mt-6">
+                  <div className="animate-spin h-8 w-8 border-2 border-gray-300 border-t-red-600 rounded-full"></div>
+                  <span className="text-lg text-gray-600">
+                    Redirecting to{" "}
+                    {loadingRegion === "na"
+                      ? "North America"
+                      : loadingRegion.toUpperCase()}
+                    ...
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
