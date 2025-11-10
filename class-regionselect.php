@@ -38,6 +38,8 @@ class RegionSelect {
 	 * @since 1.0
 	 */
 	public function __construct() {
+		// Add noindex to region select page.
+		add_action( 'wp_head', array( $this, 'add_noindex_to_region_page' ) );
 
 		add_action( 'template_redirect', array( $this, 'check_region_cookie' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -48,7 +50,14 @@ class RegionSelect {
 		// Get the region page ID from options.
 		$this->region_page_id = get_option( 'region_select_page_id', 0 );
 	}
-
+	/**
+	 * Add noindex meta tag to region select page
+	 */
+	public function add_noindex_to_region_page() {
+		if ( is_page( $this->region_page_id ) ) {
+			echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
+		}
+	}
 	/**
 	 * Check if the region cookie is set - only on initial front page visit
 	 *
@@ -61,7 +70,7 @@ class RegionSelect {
 			return;
 		}
 
-		// Check if page is password protected
+		// Check if page is password protected.
 		if ( post_password_required( $post ) ) {
 			return;
 		}
