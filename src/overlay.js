@@ -72,9 +72,12 @@ import "./styles/region-select.scss";
   }
 
   function showOverlay() {
+    // Use a solid white fullscreen overlay so the overlay covers page content
+    // with a white background (helps match the site's modal/panel look).
+    // If you prefer a dim backdrop instead, use `bg-black/60` or another value.
     var overlay = el(
       "div",
-      "rs-overlay fixed inset-0 bg-black/60 flex items-center justify-center"
+      "rs-overlay fixed inset-0 bg-white flex items-center justify-center"
     );
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
