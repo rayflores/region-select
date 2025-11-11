@@ -4,7 +4,9 @@
 .rs-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  /* Use a solid white backdrop to match requested look. This overrides
+     any utility class order issues and guarantees a white background. */
+  background: #ffffff;
   display:flex;
   align-items:center;
   justify-content:center;

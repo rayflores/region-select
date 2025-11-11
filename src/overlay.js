@@ -1,5 +1,9 @@
 // Overlay entry — small vanilla JS module built via wp-scripts so it shares Tailwind/PostCSS output
 import "./styles/region-select.scss";
+// Ensure overlay-specific rules are included in the bundle. `overlay.scss`
+// contains `.rs-overlay` and related selectors and must be imported so the
+// compiled `build/overlay.css` contains those rules.
+import "./overlay.scss";
 
 (function () {
   "use strict";
