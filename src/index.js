@@ -20,17 +20,28 @@ const RegionSelect = () => {
     // Check for existing region cookie
     const currentRegion = getCookie("selectedRegion");
 
+    // Resolve destinations mapping passed from PHP (if present)
+    var destinations =
+      typeof wpData !== "undefined" && wpData.destinations
+        ? wpData.destinations
+        : {};
+
     if (currentRegion) {
       setLoading(true);
       setLoadingRegion(currentRegion);
 
-      // Redirect based on the stored region
+      // Redirect based on the stored region (use mapping when available)
       setTimeout(() => {
+        if (destinations && destinations[currentRegion]) {
+          window.location.href = destinations[currentRegion];
+          return;
+        }
+
         if (currentRegion === "na") {
-          // For North America, redirect to home with lang parameter
-          window.location.href = wpData.homeUrl + "?lang=na";
+          // For North America, redirect to home with region parameter (server will set cookie)
+          window.location.href = wpData.homeUrl + "?region=na";
         } else {
-          // For European regions, redirect to bartongarnet with appropriate language
+          // Fallback to bartongarnet pattern
           if (currentRegion === "uk") {
             window.location.href = "https://bartongarnet.com/?lang=en";
           } else {
@@ -76,25 +87,38 @@ const RegionSelect = () => {
 
     // Short delay to show loading state, then redirect based on region
     setTimeout(() => {
-      if (regionId === "na") {
-        // For North America, use PHP flow - redirect with region parameter
-        // PHP will handle cookie setting and final redirect
-        window.location.href = wpData.homeUrl + "?region=na";
-      } else {
-        // For European regions, handle everything in JavaScript
-        // Set cookie directly
-        const domain = window.location.hostname;
-        const cookieString = `selectedRegion=${regionId}; path=/; domain=${domain}; max-age=${
+      // Use mapping from PHP when available, otherwise fallback to previous logic.
+      var destinations =
+        typeof wpData !== "undefined" && wpData.destinations
+          ? wpData.destinations
+          : {};
+
+      if (destinations && destinations[regionId]) {
+        // Set cookie locally, then redirect to mapped URL.
+        document.cookie = `selectedRegion=${regionId}; path=/; max-age=${
           30 * 24 * 60 * 60
         }`;
-        document.cookie = cookieString;
+        window.location.href = destinations[regionId];
+        return;
+      }
 
-        // Direct redirect to bartongarnet
-        if (regionId === "uk") {
-          window.location.href = "https://bartongarnet.com/?lang=en";
-        } else {
-          window.location.href = "https://bartongarnet.com/?lang=" + regionId;
-        }
+      if (regionId === "na") {
+        // For North America, use PHP flow - redirect with region parameter
+        window.location.href = wpData.homeUrl + "?region=na";
+        return;
+      }
+
+      // Fallback: set cookie and redirect to bartongarnet pattern
+      const domain = window.location.hostname;
+      const cookieString = `selectedRegion=${regionId}; path=/; domain=${domain}; max-age=${
+        30 * 24 * 60 * 60
+      }`;
+      document.cookie = cookieString;
+
+      if (regionId === "uk") {
+        window.location.href = "https://bartongarnet.com/?lang=en";
+      } else {
+        window.location.href = "https://bartongarnet.com/?lang=" + regionId;
       }
     }, 500); // Slightly longer delay to show the loading animation
   };
