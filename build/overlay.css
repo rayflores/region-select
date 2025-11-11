@@ -679,7 +679,7 @@ video {
   transition-duration: 150ms;
 }.duration-200 {
   transition-duration: 200ms;
-}#region-select-root{background-color:#fff}#region-select-root .lang-select{cursor:pointer}#region-select-root .lang-select:hover{box-shadow:0 1rem 1rem rgba(0,0,0,.175);border-radius:.5rem}.fusion-secondary-header{display:none}nav.fusion-main-menu{display:none}.avada-page-titlebar-wrapper{display:none}#sliders-container{display:none}h1.entry-title{display:none}.fusion-footer{display:none}@media (min-width: 640px) {
+}#region-select-root{background-color:#fff}#region-select-root .lang-select{cursor:pointer}#region-select-root .lang-select:hover{box-shadow:0 1rem 1rem rgba(0,0,0,.175);border-radius:.5rem}@media (min-width: 640px) {
 
   .sm\:grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));

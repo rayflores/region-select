@@ -32,33 +32,3 @@ $transition-speed: 0.2s;
         }
     }
 }
-
-
-/**
-Remove Menu From Main Navigation
-**/
-.fusion-secondary-header {
-    display: none;
-}
-nav {
-    &.fusion-main-menu {
-        display: none;
-    }
-}
-// Remove title bar
-.avada-page-titlebar-wrapper {
-    display: none;
-}
-// Remove Main Content
-#sliders-container {
-    display: none;
-}
-h1.entry-title { 
-    display: none;
-}
-// Remove Footer
-.fusion-footer {
-    display: none;
-}
-
-
