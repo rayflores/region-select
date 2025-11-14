@@ -55,6 +55,7 @@ class RegionSelect {
 		// Admin settings: add menu and register settings.
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	/**
@@ -67,6 +68,23 @@ class RegionSelect {
 			'manage_options',
 			'region-select',
 			array( $this, 'render_settings_page' )
+		);
+	}
+
+	/**
+	 * Enqueue admin scripts/styles for the settings page.
+	 */
+	public function admin_enqueue_scripts( $hook ) {
+		// Only load on our plugin settings page.
+		if ( 'settings_page_region-select' !== $hook ) {
+			return;
+		}
+		wp_enqueue_script(
+			'region-select-admin',
+			plugins_url( 'admin/region-select-admin.js', __FILE__ ),
+			array(),
+			filemtime( plugin_dir_path( __FILE__ ) . 'admin/region-select-admin.js' ),
+			true
 		);
 	}
 
@@ -84,6 +102,115 @@ class RegionSelect {
 					'default'           => 'overlay',
 				)
 			);
+
+			// Destinations mapping (array of rows with code,label,url). Stored as option 'region_select_destinations'.
+			register_setting(
+				'region_select_options',
+				'region_select_destinations',
+				array(
+					'sanitize_callback' => array( $this, 'sanitize_destinations' ),
+					'description'       => 'Mapping of region rows (code,label,url)',
+					'default'           => array(),
+				)
+			);
+	}
+
+	/**
+	 * Sanitize destinations option input.
+	 * Expect an array of region_code => url or an array of rows with 'code' and 'url'.
+	 */
+	/**
+	 * Sanitize destinations option input.
+	 * Expect an array of rows where each row contains 'code', 'label', and 'url'.
+	 *
+	 * @param mixed $input Raw value from options POST.
+	 * @return array Sanitized list of rows (each row: array with code,label,url).
+	 */
+	public function sanitize_destinations( $input ) {
+		$clean = array();
+		if ( ! is_array( $input ) ) {
+			return $clean;
+		}
+
+		// New format: array of countries, each country is array with 'code','label','destinations' (array of rows)
+		// Backwards compatibility: accept flat list of rows (code,label,url) or legacy associative map code=>url
+		$is_grouped = false;
+		foreach ( $input as $v ) {
+			if ( is_array( $v ) && isset( $v['destinations'] ) ) {
+				$is_grouped = true;
+				break;
+			}
+		}
+
+		if ( $is_grouped ) {
+			// sanitize grouped structure
+			foreach ( $input as $country ) {
+				if ( ! is_array( $country ) ) {
+					continue;
+				}
+				$ccode  = isset( $country['code'] ) ? sanitize_text_field( $country['code'] ) : '';
+				$clabel = isset( $country['label'] ) ? sanitize_text_field( $country['label'] ) : '';
+				$dests  = array();
+				if ( isset( $country['destinations'] ) && is_array( $country['destinations'] ) ) {
+					foreach ( $country['destinations'] as $d ) {
+						if ( ! is_array( $d ) ) {
+							continue;
+						}
+						$dcode  = isset( $d['code'] ) ? sanitize_text_field( $d['code'] ) : '';
+						$dlabel = isset( $d['label'] ) ? sanitize_text_field( $d['label'] ) : '';
+						$durl   = isset( $d['url'] ) ? esc_url_raw( $d['url'] ) : '';
+						if ( $dcode && $durl ) {
+							$dests[] = array(
+								'code'  => $dcode,
+								'label' => $dlabel,
+								'url'   => $durl,
+							);
+						}
+					}
+				}
+				// Only add country if it has at least one destination
+				if ( ! empty( $dests ) ) {
+					$clean[] = array(
+						'code'         => $ccode,
+						'label'        => $clabel,
+						'destinations' => $dests,
+					);
+				}
+			}
+			return $clean;
+		}
+
+		// Legacy / flat format: convert into a single default country container
+		$dests = array();
+		foreach ( $input as $k => $v ) {
+			$code  = '';
+			$label = '';
+			$url   = '';
+			if ( is_array( $v ) ) {
+				$code  = isset( $v['code'] ) ? sanitize_text_field( $v['code'] ) : '';
+				$label = isset( $v['label'] ) ? sanitize_text_field( $v['label'] ) : '';
+				$url   = isset( $v['url'] ) ? esc_url_raw( $v['url'] ) : '';
+			} elseif ( is_string( $k ) && is_string( $v ) ) {
+				// legacy associative map: code => url
+				$code = sanitize_text_field( $k );
+				$url  = esc_url_raw( $v );
+			}
+			if ( $code && $url ) {
+				$dests[] = array(
+					'code'  => $code,
+					'label' => $label,
+					'url'   => $url,
+				);
+			}
+		}
+		if ( ! empty( $dests ) ) {
+			$clean[] = array(
+				'code'         => 'default',
+				'label'        => 'All Regions',
+				'destinations' => $dests,
+			);
+		}
+		return $clean;
 	}
 
 	/**
@@ -94,6 +221,95 @@ class RegionSelect {
 			return;
 		}
 		$mode = get_option( 'region_select_mode', 'overlay' );
+		// Load configured countries with nested destinations. Provide sensible defaults when empty.
+		$raw_dest = get_option( 'region_select_destinations', array() );
+		if ( empty( $raw_dest ) ) {
+			$countries = array(
+				array(
+					'code'         => 'americas',
+					'label'        => 'Americas',
+					'destinations' => array(
+						array(
+							'code'  => 'na',
+							'label' => 'English (Americas)',
+							'url'   => home_url() . '?region=na',
+						),
+					),
+				),
+				array(
+					'code'         => 'europe',
+					'label'        => 'Europe',
+					'destinations' => array(
+						array(
+							'code'  => 'uk',
+							'label' => 'English (UK)',
+							'url'   => 'https://bartongarnet.com/?lang=en',
+						),
+						array(
+							'code'  => 'fr',
+							'label' => 'French / Français',
+							'url'   => 'https://bartongarnet.com/?lang=fr',
+						),
+						array(
+							'code'  => 'de',
+							'label' => 'German / Deutsch',
+							'url'   => 'https://bartongarnet.com/?lang=de',
+						),
+						array(
+							'code'  => 'it',
+							'label' => 'Italian / Italiano',
+							'url'   => 'https://bartongarnet.com/?lang=it',
+						),
+						array(
+							'code'  => 'es',
+							'label' => 'Spanish / Español',
+							'url'   => 'https://bartongarnet.com/?lang=es',
+						),
+					),
+				),
+			);
+		} else {
+			// If option is stored as grouped countries (new format), use it; otherwise migrate flat rows into a default country.
+			$countries = array();
+			if ( is_array( $raw_dest ) ) {
+				$grouped = false;
+				foreach ( $raw_dest as $v ) {
+					if ( is_array( $v ) && isset( $v['destinations'] ) ) {
+						$grouped = true;
+						break;
+					}
+				}
+				if ( $grouped ) {
+					// Use as-is (assume sanitized on save).
+					$countries = $raw_dest;
+				} else {
+					// Flat rows: convert to a single default country for the UI.
+					$dests = array();
+					foreach ( $raw_dest as $k => $v ) {
+						if ( is_array( $v ) && isset( $v['code'] ) && isset( $v['url'] ) ) {
+							$dests[] = array(
+								'code'  => $v['code'],
+								'label' => isset( $v['label'] ) ? $v['label'] : '',
+								'url'   => $v['url'],
+							);
+						} elseif ( is_string( $k ) && is_string( $v ) ) {
+							$dests[] = array(
+								'code'  => $k,
+								'label' => '',
+								'url'   => $v,
+							);
+						}
+					}
+					if ( ! empty( $dests ) ) {
+						$countries[] = array(
+							'code'         => 'default',
+							'label'        => 'All Regions',
+							'destinations' => $dests,
+						);
+					}
+				}
+			}
+		}
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Region Select', 'region-select' ); ?></h1>
@@ -116,6 +332,52 @@ class RegionSelect {
 						</td>
 					</tr>
 				</table>
+			<h2><?php esc_html_e( 'Region destinations', 'region-select' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'Create countries/groups and add destinations inside each. The overlay will render countries as tabs with destinations below.', 'region-select' ); ?></p>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e( 'Countries', 'region-select' ); ?></th>
+					<td>
+						<div id="rs-countries">
+							<?php
+							foreach ( $countries as $ci => $country ) :
+								$ccode  = isset( $country['code'] ) ? $country['code'] : '';
+								$clabel = isset( $country['label'] ) ? $country['label'] : '';
+								$cdests = isset( $country['destinations'] ) && is_array( $country['destinations'] ) ? $country['destinations'] : array();
+								?>
+								<div class="rs-country-block" data-country-index="<?php echo esc_attr( $ci ); ?>">
+									<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
+										<span class="rs-drag-handle" style="cursor:move;padding:6px;border:1px solid #ccc;background:#fafafa;">≡</span>
+										<input type="text" name="region_select_destinations[<?php echo esc_attr( $ci ); ?>][code]" value="<?php echo esc_attr( $ccode ); ?>" placeholder="country code (optional)" style="width:160px;margin-right:8px;" />
+										<input type="text" name="region_select_destinations[<?php echo esc_attr( $ci ); ?>][label]" value="<?php echo esc_attr( $clabel ); ?>" placeholder="Country label (shown as tab)" style="width:320px;margin-right:8px;" />
+										<button type="button" class="button rs-country-remove"><?php esc_html_e( 'Remove Country', 'region-select' ); ?></button>
+									</div>
+									<div class="rs-destinations" data-country-index="<?php echo esc_attr( $ci ); ?>">
+										<?php
+										foreach ( $cdests as $di => $d ) :
+											$dcode  = isset( $d['code'] ) ? $d['code'] : '';
+											$dlabel = isset( $d['label'] ) ? $d['label'] : '';
+											$durl   = isset( $d['url'] ) ? $d['url'] : '';
+											?>
+											<div class="rs-destination-row" draggable="true">
+												<input type="text" name="region_select_destinations[<?php echo esc_attr( $ci ); ?>][destinations][<?php echo esc_attr( $di ); ?>][code]" value="<?php echo esc_attr( $dcode ); ?>" placeholder="code" style="width:100px;margin-right:8px;" />
+												<input type="text" name="region_select_destinations[<?php echo esc_attr( $ci ); ?>][destinations][<?php echo esc_attr( $di ); ?>][label]" value="<?php echo esc_attr( $dlabel ); ?>" placeholder="Label (shown in overlay)" style="width:260px;margin-right:8px;" />
+												<input type="url" name="region_select_destinations[<?php echo esc_attr( $ci ); ?>][destinations][<?php echo esc_attr( $di ); ?>][url]" value="<?php echo esc_attr( $durl ); ?>" placeholder="https://example.com" style="width:240px;margin-right:8px;" />
+												<button type="button" class="button rs-destination-remove"><?php esc_html_e( 'Remove', 'region-select' ); ?></button>
+											</div>
+										<?php endforeach; ?>
+									</div>
+									<p><button type="button" class="button rs-add-destination" data-country-index="<?php echo esc_attr( $ci ); ?>"><?php esc_html_e( 'Add destination', 'region-select' ); ?></button></p>
+								</div>
+							<?php endforeach; ?>
+						</div>
+						<p>
+							<button type="button" class="button" id="rs-add-country"><?php esc_html_e( 'Add country', 'region-select' ); ?></button>
+						</p>
+						<p class="description"><?php esc_html_e( 'Region codes inside destinations should match the overlay data-region attributes (for example: na, uk, fr).', 'region-select' ); ?></p>
+					</td>
+				</tr>
+			</table>
 				<?php submit_button(); ?>
 			</form>
 		</div>
@@ -158,6 +420,69 @@ class RegionSelect {
 				true
 			);
 
+			// Provide the frontend with grouped countries (each country has destinations).
+			$stored    = get_option( 'region_select_destinations', array() );
+			$countries = array();
+			if ( is_array( $stored ) ) {
+				$grouped = false;
+				foreach ( $stored as $v ) {
+					if ( is_array( $v ) && isset( $v['destinations'] ) ) {
+						$grouped = true;
+						break;
+					}
+				}
+				if ( $grouped ) {
+					// sanitize contents for output
+					foreach ( $stored as $c ) {
+						if ( ! is_array( $c ) ) {
+							continue;
+						}
+						$cd = array(
+							'code'         => isset( $c['code'] ) ? sanitize_text_field( $c['code'] ) : '',
+							'label'        => isset( $c['label'] ) ? sanitize_text_field( $c['label'] ) : '',
+							'destinations' => array(),
+						);
+						if ( isset( $c['destinations'] ) && is_array( $c['destinations'] ) ) {
+							foreach ( $c['destinations'] as $d ) {
+								if ( is_array( $d ) && isset( $d['code'] ) && isset( $d['url'] ) ) {
+									$cd['destinations'][] = array(
+										'code'  => sanitize_text_field( $d['code'] ),
+										'label' => isset( $d['label'] ) ? sanitize_text_field( $d['label'] ) : '',
+										'url'   => esc_url_raw( $d['url'] ),
+									);
+								}
+							}
+						}
+						$countries[] = $cd;
+					}
+				} else {
+					// flat rows: convert to a single default country
+					$dests = array();
+					foreach ( $stored as $k => $v ) {
+						if ( is_array( $v ) && isset( $v['code'] ) && isset( $v['url'] ) ) {
+							$dests[] = array(
+								'code'  => sanitize_text_field( $v['code'] ),
+								'label' => isset( $v['label'] ) ? sanitize_text_field( $v['label'] ) : '',
+								'url'   => esc_url_raw( $v['url'] ),
+							);
+						} elseif ( is_string( $k ) && is_string( $v ) ) {
+							$dests[] = array(
+								'code'  => sanitize_text_field( $k ),
+								'label' => '',
+								'url'   => esc_url_raw( $v ),
+							);
+						}
+					}
+					if ( ! empty( $dests ) ) {
+						$countries[] = array(
+							'code'         => 'default',
+							'label'        => 'All Regions',
+							'destinations' => $dests,
+						);
+					}
+				}
+			}
+
 			wp_localize_script(
 				'region-overlay',
 				'regionOverlayData',
@@ -166,14 +491,7 @@ class RegionSelect {
 					'cookieName'   => 'selectedRegion',
 					'cookieDays'   => 30,
 					'regionPageId' => $this->region_page_id,
-					'destinations' => array(
-						'na' => home_url() . '?region=na',
-						'uk' => 'https://bartongarnet.com/?lang=en',
-						'fr' => 'https://bartongarnet.com/?lang=fr',
-						'de' => 'https://bartongarnet.com/?lang=de',
-						'it' => 'https://bartongarnet.com/?lang=it',
-						'es' => 'https://bartongarnet.com/?lang=es',
-					),
+					'countries'    => $countries,
 				)
 			);
 		} else {
