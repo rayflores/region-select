@@ -53,26 +53,82 @@ import "./overlay.scss";
       setCookie(cookieName, regionCode, cookieDays);
 
       // Prefer explicit mapping from PHP if available (for exact destination domains/paths).
-      var href =
+      var mappedHref =
         data && data.destinations && data.destinations[regionCode]
           ? data.destinations[regionCode]
           : null;
 
-      if (!href) {
-        // Fallback behavior: homeUrl + lang param if provided.
-        href = homeUrl;
-        if (params && params.lang) {
-          href =
-            href +
-            (href.indexOf("?") === -1 ? "?" : "&") +
-            "lang=" +
-            encodeURIComponent(params.lang);
-        }
-      }
-
+      var href = buildRedirectHref(mappedHref, regionCode, params);
       window.location.href = href;
     });
     return btn;
+  }
+
+  /**
+   * Build redirect URL.
+   * If targetUrl is on the same origin, preserve current pathname (including trailing slash)
+   * and merge/append a `lang` query param (or use any lang param present on the target).
+   * Otherwise return the absolute target URL.
+   */
+  function buildRedirectHref(targetUrl, regionCode, params) {
+    try {
+      if (!targetUrl) {
+        // No explicit mapping — fallback to homeUrl + lang param (or params.lang)
+        var base = homeUrl || "/";
+        var langVal = params && params.lang ? params.lang : regionCode;
+        return (
+          base +
+          (base.indexOf("?") === -1 ? "?" : "&") +
+          "lang=" +
+          encodeURIComponent(langVal)
+        );
+      }
+
+      var parsed = new URL(targetUrl, location.href);
+
+      // If the selected destination is on the same origin, keep the current path
+      // (this preserves trailing slash) and attach/merge the lang parameter.
+      if (parsed.origin === location.origin) {
+        var cur = new URL(location.href);
+        var targetParams = parsed.searchParams;
+        var langKey = "lang";
+
+        // If the mapped target already contains a lang param, prefer it.
+        if (targetParams.has(langKey)) {
+          // Use current pathname but target's search params.
+          return (
+            parsed.origin +
+            cur.pathname +
+            (targetParams.toString() ? "?" + targetParams.toString() : "") +
+            (parsed.hash || "")
+          );
+        }
+
+        // Otherwise set lang param to the selected region (or params.lang if provided).
+        var merged = new URL(location.href);
+        var langVal = params && params.lang ? params.lang : regionCode;
+        merged.searchParams.set(langKey, langVal);
+        // Return origin + current pathname + merged search + current hash.
+        return (
+          parsed.origin +
+          merged.pathname +
+          (merged.search ? merged.search : "") +
+          (merged.hash ? merged.hash : "")
+        );
+      }
+
+      // Different origin -> return the full target URL (preserves whatever path/query it had).
+      return parsed.href;
+    } catch (e) {
+      // If URL parsing fails, fallback to home with lang param.
+      var fallback = homeUrl || "/";
+      return (
+        fallback +
+        (fallback.indexOf("?") === -1 ? "?" : "&") +
+        "lang=" +
+        encodeURIComponent(regionCode)
+      );
+    }
   }
 
   function showOverlay() {
@@ -219,16 +275,8 @@ import "./overlay.scss";
           }
           if (target) break;
         }
-        var href = target && target.url ? target.url : null;
-        if (!href) {
-          href = homeUrl;
-          if (regionCode)
-            href =
-              href +
-              (href.indexOf("?") === -1 ? "?" : "&") +
-              "lang=" +
-              encodeURIComponent(regionCode);
-        }
+        var mapped = target && target.url ? target.url : null;
+        var href = buildRedirectHref(mapped, regionCode);
         window.location.href = href;
       });
     });

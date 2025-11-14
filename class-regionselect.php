@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Region Select
  * Description: A simple plugin to add a region select field to the website.
- * Version: 2.5.0
+ * Version: 3.0.0
  * Author: Ray Flores
  * Author URI: https://rayflores.com
  * License: GPL2
