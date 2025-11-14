@@ -136,7 +136,7 @@ import "./overlay.scss";
                 <div class="grid grid-cols-1 gap-4 border-t-2 border-gray-600 md:border-none">
                   <div class="h-auto ps-0 md:ps-5 flex flex-col gap-2 ps-4 md:text-start">
                     <div class="font-semibold">Europe</div>
-                    <div class="h-auto md:ps-0 p-2 flex flex-col gap-2 lang-select text-center md:text-start cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105 relative" data-region="uk" style="--hover-color: #c20430; color: rgb(194, 4, 48);"><div class="flex items-center justify-center md:justify-start gap-2">English</div></div>
+                    <div class="h-auto md:ps-0 p-2 flex flex-col gap-2 lang-select text-center md:text-start cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105 relative" data-region="uk" style="--hover-color: #c20430;"><div class="flex items-center justify-center md:justify-start gap-2">English</div></div>
                     <div class="h-auto md:ps-0 p-2 flex flex-col gap-2 lang-select text-center md:text-start cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105 relative" data-region="fr" style="--hover-color: #c20430;"><div class="flex items-center justify-center md:justify-start gap-2">French / Français</div></div>
                     <div class="h-auto md:ps-0 p-2 flex flex-col gap-2 lang-select text-center md:text-start cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105 relative" data-region="de" style="--hover-color: #c20430;"><div class="flex items-center justify-center md:justify-start gap-2">German / Deutsch</div></div>
                     <div class="h-auto md:ps-0 p-2 flex flex-col gap-2 lang-select text-center md:text-start cursor-pointer transition-all duration-200 md:hover:bg-gray-100 md:hover:font-semibold md:hover:shadow-md md:hover:rounded-lg md:hover:scale-105 relative" data-region="it" style="--hover-color: #c20430;"><div class="flex items-center justify-center md:justify-start gap-2">Italian / Italiano</div></div>
@@ -255,4 +255,3 @@ import "./overlay.scss";
     showOverlay();
   }
 })();
-
